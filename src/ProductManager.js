@@ -60,8 +60,10 @@ class ProductManager {
     return fileData.products;
   };
 
-  getProductById = (id) => {
+  getProductById = async (id) => {
     // METODO PARA OBTENER PRODUCTO POR ID
+    const { products } = await readFile(this.path);
+    this.products = products;
     let product = this.products.find((element) => element.id === id);
     if (product) {
       return product;
