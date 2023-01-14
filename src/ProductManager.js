@@ -4,7 +4,7 @@ const writeFile = (path, products) =>
   fs.promises.writeFile(path, JSON.stringify({ products: products }));
 
 const readFile = async (path) => {
-  const asyncGetProducts = await fs.promises.readFile(path);
+  const asyncGetProducts = await fs.promises.readFile(path,{encoding: 'utf-8'});
   const parseResult = JSON.parse(asyncGetProducts);
 
   return parseResult;
@@ -28,9 +28,9 @@ class ProductManager {
     }
   };
 
-  addProduct = async ({ title, descp, price, thumbnail, stock, code }) => {
+  addProduct = async ({ title, description, price,status = true, thumbnail, stock, category, code }) => {
     // METODO PARA AGREGAR PRODUCTOS
-    if (title && descp && price && thumbnail && stock && code) {
+    if (title && description && price && status && stock && category && code) {
       // VALIDACION TODOS LOS DATOS SON OBLIGATORIOS
       let exist = this.products.find((element) => element.code === code);
       if (exist) {
@@ -40,10 +40,12 @@ class ProductManager {
         this.products.push({
           id: this.products.length, //GENERA UN ID AUTOINCREMENTABLE
           title,
-          descp,
+          description,
           price,
+          status,
           thumbnail,
           stock,
+          category,
           code,
         });
         await writeFile(this.path, this.products);
@@ -109,37 +111,38 @@ class ProductManager {
   };
 }
 
-module.exports = ProductManager
+const ProductM = new ProductManager("./data.json");
+module.exports = ProductM
 
 
-async function main() {
-  const productManger = new ProductManager("./data.json");
-  await productManger.initialize();
+// async function main() {
+//   const productManger = new ProductManager("./data.json");
+//   await productManger.initialize();
 
-  let products = await productManger.getProducts();
-  console.log(products);
+//   let products = await productManger.getProducts();
+//   console.log(products);
 
-  const newProduct2 = {
-    title: "P1",
-    descp: "D1",
-    price: "P1",
-    thumbnail: "T1",
-    code: "C7",
-    stock: "S1",
-  };
+//   const newProduct2 = {
+//     title: "P1",
+//     descp: "D1",
+//     price: "P1",
+//     thumbnail: "T1",
+//     code: "C7",
+//     stock: "S1",
+//   };
 
-  await productManger.addProduct(newProduct2);
+//   await productManger.addProduct(newProduct2);
 
-  const newProduct3 = {
-    title: "P1",
-    descp: "D1",
-    price: "P1",
-    thumbnail: "T1",
-    code: "C8",
-    stock: "S1",
-  };
+//   const newProduct3 = {
+//     title: "P1",
+//     descp: "D1",
+//     price: "P1",
+//     thumbnail: "T1",
+//     code: "C8",
+//     stock: "S1",
+//   };
 
-  await productManger.addProduct(newProduct3);
-}
+//   await productManger.addProduct(newProduct3);
+// }
 
-main();
+// main();

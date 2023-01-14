@@ -1,29 +1,12 @@
 const express = require("express");
-const ProductManager = require("./ProductManager");
-const server = express();
-const pm = new ProductManager("./data.json");
+const cartsRouter = require("./routes/carts.router");
+const productRouter = require("./routes/products.router");
+const app = express();
 
-server.get("/products", async (req, res) => {
-  let product = await pm.getProducts();
-  let limit = req.query.limit;
-  if (!limit) {
-    res.send({ products: product });
-  } else {
-    let productLimit = product.slice(0, limit);
-    res.send({ products: productLimit });
-  }
-});
+app.use(express.json())
+app.use('/api/products',productRouter);
+app.use('/api/carts',cartsRouter)
 
-server.get("/products/:pid", async (req, res) => {
-  let productId = parseInt(req.params.pid);
-  let productById = await pm.getProductById(productId);
-  if (productById) {
-    res.send({ product: productById });
-  } else {
-    res.send(`No existe un producto con el id: ${productId}`);
-  }
-});
-
-server.listen(8080, () => {
+app.listen(8080, () => {
   console.log("servidor ejecutado en puerto 8080");
 });
