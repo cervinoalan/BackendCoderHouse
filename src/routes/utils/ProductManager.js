@@ -4,7 +4,9 @@ const writeFile = (path, products) =>
   fs.promises.writeFile(path, JSON.stringify({ products: products }));
 
 const readFile = async (path) => {
-  const asyncGetProducts = await fs.promises.readFile(path,{encoding: 'utf-8'});
+  const asyncGetProducts = await fs.promises.readFile(path, {
+    encoding: "utf-8",
+  });
   const parseResult = JSON.parse(asyncGetProducts);
 
   return parseResult;
@@ -28,14 +30,25 @@ class ProductManager {
     }
   };
 
-  addProduct = async ({ title, description, price,status = true, thumbnail, stock, category, code }) => {
+  addProduct = async ({
+    title,
+    description,
+    price,
+    status = true,
+    thumbnail,
+    stock,
+    category,
+    code,
+  }) => {
     // METODO PARA AGREGAR PRODUCTOS
     if (title && description && price && status && stock && category && code) {
       // VALIDACION TODOS LOS DATOS SON OBLIGATORIOS
+      const { products } = await readFile(this.path);
+      this.products = products;
       let exist = this.products.find((element) => element.code === code);
       if (exist) {
         // VALIDACION CODE IRREPETIBLE
-        console.log("Ya existe un producto con ese code");
+        throw new Error("Ya existe un producto con ese code");
       } else {
         this.products.push({
           id: this.products.length, //GENERA UN ID AUTOINCREMENTABLE
@@ -52,7 +65,7 @@ class ProductManager {
         console.log("Producto agregado exitosamente");
       }
     } else {
-      console.log("Falta ingresar uno o mas datos");
+      throw new Error("Falta ingresar uno o mas datos");
     }
   };
 
@@ -66,19 +79,20 @@ class ProductManager {
     // METODO PARA OBTENER PRODUCTO POR ID
     const { products } = await readFile(this.path);
     this.products = products;
-    let product = this.products.find((element) => element.id === id);
-    if (product) {
-      return product;
+    const Product = products[id];
+    if (Product) {
+      return Product;
     } else {
-      console.log("No se encuentra un producto con ese id");
-      return null;
+      throw new Error("Producto no encontrado");
     }
   };
 
   updateProduct = async (id, newProduct) => {
     // metodo para actualizar un producto por id
+    const { products } = await readFile(this.path);
+    this.products = products;
     const findIndexProduct = this.products.findIndex(
-      (product) => product.id === id
+      (product) => product.id == id
     );
 
     if (findIndexProduct !== -1) {
@@ -91,12 +105,14 @@ class ProductManager {
       await writeFile(this.path, this.products);
       console.log("Actualizado correctamente");
     } else {
-      console.log("No se encuentra un producto con ese id");
+      throw new Error("No se encuentra un producto con ese id");
     }
   };
 
   deleteProduct = async (id) => {
     // metodo para eliminar producto por id
+    const { products } = await readFile(this.path);
+    this.products = products;
     const findIndexProduct = this.products.findIndex(
       (product) => product.id === id
     );
@@ -106,43 +122,10 @@ class ProductManager {
       await writeFile(this.path, newProducts);
       console.log("Eliminado correctamente");
     } else {
-      console.log("No se encuentra un producto con ese id");
+      throw new Error("No se encuentra un producto con ese id");
     }
   };
 }
 
-const ProductM = new ProductManager("./data.json");
-module.exports = ProductM
-
-
-// async function main() {
-//   const productManger = new ProductManager("./data.json");
-//   await productManger.initialize();
-
-//   let products = await productManger.getProducts();
-//   console.log(products);
-
-//   const newProduct2 = {
-//     title: "P1",
-//     descp: "D1",
-//     price: "P1",
-//     thumbnail: "T1",
-//     code: "C7",
-//     stock: "S1",
-//   };
-
-//   await productManger.addProduct(newProduct2);
-
-//   const newProduct3 = {
-//     title: "P1",
-//     descp: "D1",
-//     price: "P1",
-//     thumbnail: "T1",
-//     code: "C8",
-//     stock: "S1",
-//   };
-
-//   await productManger.addProduct(newProduct3);
-// }
-
-// main();
+const ProductM = new ProductManager(__dirname + "/../../assets/products.json");
+module.exports = ProductM;
