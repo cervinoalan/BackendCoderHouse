@@ -97,11 +97,13 @@ class ProductManager {
 
     if (findIndexProduct !== -1) {
       const id = this.products[findIndexProduct].id;
-
+      if(id == newProduct.id){
       this.products[findIndexProduct] = {
         id,
-        ...newProduct,
-      };
+        ...newProduct,}
+      }else{
+        throw new Error("No es posible modificar el id del producto");
+      }
       await writeFile(this.path, this.products);
       console.log("Actualizado correctamente");
     } else {
