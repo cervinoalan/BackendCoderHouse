@@ -56,7 +56,7 @@ class ProductManager {
           description,
           price,
           status,
-          thumbnail,
+          thumbnail: [],
           stock,
           category,
           code,
