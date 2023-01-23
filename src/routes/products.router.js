@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const productManager = require("./utils/ProductManager");
+const { emitDeleteProduct, emitAddProduct } = require("./utils/socket.io");
 const router = Router();
 
 router.get("/", async (req, res) => {
@@ -33,6 +34,7 @@ router.post("/", async (req, res) => {
   let data = req.body;
   try {
     let newProduct = await productManager.addProduct(data);
+    emitAddProduct(data);
     res.json({
       msg: "Producto agregado correctamente",
       newProduct,
@@ -66,6 +68,7 @@ router.delete("/:pid", async (req, res) => {
   let productId = parseInt(req.params.pid);
   try {
     let product = await productManager.deleteProduct(productId);
+    emitDeleteProduct(productId);
     res.json({
       msg: "Producto eliminado correctamente",
       product,
