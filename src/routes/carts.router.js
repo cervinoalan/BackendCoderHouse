@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const productManager = require("./utils/ProductManager");
-const cartManager = require("./utils/CartsManager");
+const productManager = require("../dao/fileSystemManagar/ProductManager");
+const cartManager = require("../dao/fileSystemManagar/CartsManager");
 const router = Router();
 
 router.post("/", async (req, res) => {
