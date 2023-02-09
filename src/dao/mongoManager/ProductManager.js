@@ -6,7 +6,6 @@ class ProductManager {
   }
 
   addProduct = async (product) => {
-    // faltan las validaciones...
     try {
       const productSaved = await productModel.create(product);
       return productSaved;

@@ -5,7 +5,8 @@ const handlebars = require("express-handlebars");
 const viewsRouter = require("./routes/views.router");
 const app = express();
 const {connectSocket} = require("./routes/utils/socket.io")
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const chatsRouter = require("./routes/chats.router");
 
 //handlebars
 app.engine("handlebars", handlebars.engine());
@@ -16,6 +17,7 @@ app.use(express.static(__dirname + "/public"));
 //rutas
 app.use(express.json());
 app.use("/api/products", productRouter);
+app.use("/api/chats", chatsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 

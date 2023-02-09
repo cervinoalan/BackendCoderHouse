@@ -18,4 +18,8 @@ router.get("/realtimeproducts", async (req, res) => {
   });
 }); 
 
+router.get('/chats', (req,res) =>{
+  res.render("chats")
+})
+
 module.exports = router;
