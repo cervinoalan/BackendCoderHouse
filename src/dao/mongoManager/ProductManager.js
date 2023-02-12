@@ -9,19 +9,22 @@ class ProductManager {
     try {
       const productSaved = await productModel.create(product);
       return productSaved;
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      return res.status(500).json({
+        msg: "error",
+        payload: "Error al Agregar Producto",
+      });
     }
   };
 
-  getProducts = async (limit) => {
-    try {
-      const products = await productModel.find().limit(limit);
+  getProducts = async (page = 1, limit = 10, query = {}) => {
+    try{
+      const products = await productModel.paginate(query,{page, limit: limit})
       return products;
     } catch (error) {
       return res.status(500).json({
         msg: "error",
-        playload: "Error al Mostrar Producto",
+        payload: "Error al Mostrar Producto",
       });
     }
   };
@@ -33,7 +36,7 @@ class ProductManager {
     } catch (error) {
       return res.status(500).json({
         msg: "error",
-        playload: "Error al Buscar Producto",
+        payload: "Error al Buscar Producto",
       });
     }
   };
@@ -48,7 +51,7 @@ class ProductManager {
     } catch (error) {
       return res.status(500).json({
         msg: "error",
-        playload: "Error al Actualizar Producto",
+        payload: "Error al Actualizar Producto",
       });
     }
   };
@@ -60,7 +63,7 @@ class ProductManager {
     } catch (error) {
       return res.status(500).json({
         msg: "error",
-        playload: "Error al Eliminar Producto",
+        payload: "Error al Eliminar Producto",
       });
     }
   };

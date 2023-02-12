@@ -7,16 +7,18 @@ const router = Router();
 const pm = new ProductManager()
 
 router.get("/", async (req, res) => {
-  const { limit = 10 } = req.query
+  const { limit , page, ...query } = req.query
   try{
-    const products = await pm.getProducts({ limit })
+    const products = await pm.getProducts( page, limit, query )
     res.json({
             msg: "Productos encontrados",
-            product: products,
+            status: "success",
+            payload: products,
            });
   } catch (error) {
     res.status(404).json({
       msg: `Ocurrio un error al intentar buscar los productos`,
+      status: "error",
     });
   }
 });
@@ -27,7 +29,7 @@ router.get("/:pid", async (req, res) => {
     let product = await pm.getProductById(productId);
     res.json({
       msg: "Producto encontrado",
-      product: product,
+      payload: product,
     });
   } catch (error) {
     res.status(404).json({

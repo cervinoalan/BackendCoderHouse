@@ -5,8 +5,11 @@ class ChatManager {
     try {
       const messageSaved = await chatModel.create(message);
       return messageSaved;
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      return res.status(500).json({
+        msg: "error",
+        playload: "Error al enviar mensaje",
+      });
     }
   };
 

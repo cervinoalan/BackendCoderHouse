@@ -5,7 +5,8 @@
 {{#each products}}
   <div>
     <h2>{{this.title}}</h2>
-    <p>Sku: {{this.id}}</p>
+    <img src={{this.thumbnail}} alt={{this.title}} />
+    <p>Sku: {{this.code}}</p>
     <p>Descripcion: {{this.description}}</p>
     <p><strong>Precio: ${{this.price}}</strong></p>
     <p>Cantidad disponible: {{this.stock}}</p>

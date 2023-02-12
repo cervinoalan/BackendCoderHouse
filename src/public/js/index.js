@@ -5,7 +5,8 @@ socket.on("init-products", ({ products }) => {
   const main = document.getElementById("list-products");
   main.innerHTML = "";
   products.forEach((product) => {
-    main.innerHTML += `<li id=${product.id}> ${product.title} </li>`;
+    console.log(product._id)
+    main.innerHTML += `<li id=${product._id}> ${product.title} </li>`;
   });
 });
 
@@ -15,4 +16,6 @@ socket.on("delete-product", ({ id }) => {
 
 socket.on("add-product", ({ data }) => {
   console.log(`Se ha agregado el producto: ${data.title}`);
+  const main = document.getElementById("list-products");
+  main.innerHTML += `<li id=${data._id}> ${data.title} </li>`;
 });

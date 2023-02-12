@@ -25,7 +25,7 @@ const emitDeleteProduct = (id) => {
 
 const emitAddProduct = (data) => {
   console.log(`Se ha agregado el producto: ${data.title}`);
-  io.emit("add-product", { data });
+  io.emit("add-product", { data});
 };
 
 const emitAddMessage = (newMessage) => {
