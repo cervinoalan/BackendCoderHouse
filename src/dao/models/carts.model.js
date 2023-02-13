@@ -14,7 +14,7 @@ const cartsSchema = new mongoose.Schema([
 			type: Array,
 			default: [],
 		},
-		user:{
+		username:{
 			tpye: String,
 		}
 	},

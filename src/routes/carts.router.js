@@ -1,6 +1,4 @@
 const { Router } = require("express");
-// const productManager = require("../dao/fileSystemManagar/ProductManager");
-// const cartManager = require("../dao/fileSystemManagar/CartsManager");
 const CartsManager = require("../dao/mongoManager/CartsManager");
 const ProductManager = require("../dao/mongoManager/ProductManager");
 const router = Router();
@@ -14,6 +12,7 @@ router.post("/", async (req, res) => {
     const createCart = await cm.createCart(cart);
     return createCart;
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       msg: "error",
       payload: "Error al Crear el Carrito",
@@ -46,17 +45,53 @@ router.post("/:cid/product/:pid", async (req, res) => {
         ok: false,
       });
     } else {
-      const cart = await cm.addProductToCart(cid, product.id);
-      res.json({
-        msg: "Producto agregado exitosamente",
-        cart
-      });
+      const cart = cm.getCartByUsername(cid);
+
+      if (!cart) {
+        const newCart = {
+          priceTotal: product.price,
+          quantityTotal: 1,
+          products: [product],
+          username: cid,
+        };
+        const cartToSave = await cm.addProductToCart(newCart);
+        res.json({
+          msg: "Producto agregado exitosamente",
+          cartToSave,
+        });
+      } else {
+        const findProduct = cart.products.find((product) => product.id === pid);
+        if (!findProduct) {
+          cart.products.push(product);
+          cart.quantity = cart.quantity + 1;
+          cart.priceTotal = cart.products.reduce(
+            (Acomulador, ProductoActual) =>
+              Acomulador + ProductoActual.quantity,
+            0
+          );
+
+          const cartToUpdate = await cm.updateCartProducts(cart);
+          res.json({
+            msg: "Produto agregado la carrito",
+            cartToUpdate,
+          });
+        }
+      }
     }
   } catch (error) {
+    console.log(error)
     res.status(404).json({
       msg: "Error al agregar producto",
     });
   }
 });
+
+router.delete("/:cid/product/:pid", async (req, res) => {});
+
+router.put("/:cid", async (req, res) => {});
+
+router.put("/:cid/product/:pid", async (req, res) => {});
+
+router.delete("/:cid", async (req, res) => {});
 
 module.exports = router;
