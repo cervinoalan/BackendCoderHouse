@@ -1,21 +1,19 @@
 const { Router } = require("express");
-// const productManager = require("../dao/fileSystemManagar/ProductManager");
-const ProductManager = require("../dao/mongoManager/ProductManager");
+const ProductM = require("../dao/fileSystemManagar/ProductManager");
 
-const pm = new ProductManager()
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const products = await pm.getProducts();
+  const products = await ProductM.getProducts();
   console.log(products)
   res.render("home", {
     style: "index.css",
-    products: products
+    products
   });
 }); 
 
 router.get("/realtimeproducts", async (req, res) => {
-  const products = await pm.getProducts();
+  const products = await ProductM.getProducts();
   res.render("realTimeProducts", {
     products,
   });

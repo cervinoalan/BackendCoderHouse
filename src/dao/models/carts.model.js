@@ -10,17 +10,13 @@ const cartsSchema = new mongoose.Schema([
 			type: Number,
 			default: 0,
 		},
-		products: [
-			{
-				_id: false,
-				id: String,
-				description: String,
-				qanttity: {
-					type: Number,
-					default: 1,
-				},
-			},
-		],
+		products: {
+			type: Array,
+			default: [],
+		},
+		user:{
+			tpye: String,
+		}
 	},
 ])
 
