@@ -1,6 +1,7 @@
 const { Router } = require("express");
 // const productManager = require("../dao/fileSystemManagar/ProductManager");
-const ProductManager = require("../dao/mongoManager/ProductManager")
+const ProductManager = require("../dao/mongoManager/ProductManager");
+const multerUtils = require("./utils/multer.utils");
 const { emitDeleteProduct, emitAddProduct } = require("./utils/socket.io");
 const router = Router();
 
@@ -38,7 +39,7 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",multerUtils.single("thumbnail"), async (req, res) => {
   let data = req.body;
   try {
     let newProduct = await pm.addProduct(data);
