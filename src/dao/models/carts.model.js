@@ -15,7 +15,8 @@ const cartsSchema = new mongoose.Schema([
 			default: [],
 		},
 		username:{
-			tpye: String,
+			type: String,
+			required: true
 		}
 	},
 ])

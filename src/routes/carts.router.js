@@ -10,7 +10,10 @@ router.post("/", async (req, res) => {
   const cart = req.body;
   try {
     const createCart = await cm.createCart(cart);
-    return createCart;
+    res.json({
+      msg: "Carritos creado exitosamente",
+      createCart,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -20,10 +23,25 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/", async (req,res) => {
+  try {
+    const carts = await cm.getCarts()
+    res.json({
+      msg: "Carritos encontrados",
+      carts,
+    });
+  } catch(error){
+    return res.status(500).json({
+      msg: "error",
+      payload: "Error al buscar los carritos",
+    });
+  }
+})
+
 router.get("/:cid", async (req, res) => {
   const cid = req.params.cid;
   try {
-    const cart = await cm.getCartsById(cid);
+    const cart = await cm.getCartByUsername(cid);
     res.json({
       msg: "Carrito encontrado",
       cart,
@@ -65,8 +83,8 @@ router.post("/:cid/product/:pid", async (req, res) => {
           cart.products.push(product);
           cart.quantity = cart.quantity + 1;
           cart.priceTotal = cart.products.reduce(
-            (Acomulador, ProductoActual) =>
-              Acomulador + ProductoActual.quantity,
+            (Acumulador, ProductoActual) =>
+              Acumulador + ProductoActual.quantity,
             0
           );
 
