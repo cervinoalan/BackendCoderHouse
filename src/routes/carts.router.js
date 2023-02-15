@@ -26,7 +26,6 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const carts = await cm.getCarts();
-    console.log(JSON.stringify(carts))
     res.json({
       msg: "Carritos encontrados",
       carts,
@@ -81,7 +80,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
         });
       } else {
         const findProduct = cart.products.find(
-          (product) => product._id.toString() === pid
+          (product) => product.id.toString() === pid
         );
         if (!findProduct) {
           cart.products.push({ id: pid, quantity: 1 });

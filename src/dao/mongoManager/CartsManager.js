@@ -19,7 +19,7 @@ class CartsManager {
 
   getCarts = async () => {
     try {
-      const carts = await cartsModel.find().populate("products.product");
+      const carts = await cartsModel.find();
       return carts;
     } catch (error) {
       return res.status(500).json({
@@ -31,7 +31,10 @@ class CartsManager {
 
   getCartByUsername = async (username) => {
     try {
-      const cart = await cartsModel.findOne({ username });
+      const cart = await cartsModel
+        .findOne({ username })
+        .populate("products.product");
+        console.log(JSON.stringify(cart))
       return cart;
     } catch (error) {
       return res.status(500).json({
@@ -82,7 +85,6 @@ class CartsManager {
       });
     }
   };
-
 }
 
 module.exports = CartsManager;
