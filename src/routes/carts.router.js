@@ -26,6 +26,7 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const carts = await cm.getCarts();
+    console.log(JSON.stringify(carts))
     res.json({
       msg: "Carritos encontrados",
       carts,
@@ -70,7 +71,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
         const newCart = {
           priceTotal: product.price,
           quantityTotal: 1,
-          products: [{ _id: pid, quantity: 1 }],
+          products: [{ id: pid, quantity: 1 }],
           username: cid,
         };
         const cartToSave = await cm.addProductToCart(newCart);
@@ -83,7 +84,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
           (product) => product._id.toString() === pid
         );
         if (!findProduct) {
-          cart.products.push({ _id: pid, quantity: 1 });
+          cart.products.push({ id: pid, quantity: 1 });
           cart.quantityTotal = cart.quantityTotal + 1;
           cart.priceTotal = cart.products.reduce(
             (Acumulador, ProductoActual) =>

@@ -19,7 +19,7 @@ class CartsManager {
 
   getCarts = async () => {
     try {
-      const carts = await cartsModel.find();
+      const carts = await cartsModel.find().populate("products.product");
       return carts;
     } catch (error) {
       return res.status(500).json({
@@ -83,7 +83,6 @@ class CartsManager {
     }
   };
 
-  deleteCartProduct = async (cart) => {}
 }
 
 module.exports = CartsManager;
