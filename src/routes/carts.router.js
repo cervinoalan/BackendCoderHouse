@@ -140,19 +140,21 @@ router.delete("/:cid/product/:pid", async (req, res) => {
         const findProduct = cart.products.find(
           (product) => product._id.toString() === pid
         );
-        if(!findProduct){
+        if (!findProduct) {
           return res.status(400).json({
             msg: `El producto no existe en el carrito`,
             ok: false,
           });
         }
         if (findProduct.quantity === 1) {
-          cart.products = cart.products.filter((prod) => prod._id.toString() !== pid);
+          cart.products = cart.products.filter(
+            (prod) => prod._id.toString() !== pid
+          );
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Produto eliminado del carrito",
             cartToUpdate,
-          })
+          });
         } else {
           findProduct.quantity--;
         }
@@ -179,22 +181,64 @@ router.delete("/:cid/product/:pid", async (req, res) => {
 
 router.put("/:cid", async (req, res) => {});
 
-router.put("/:cid/product/:pid", async (req, res) => {});
+router.put("/:cid/product/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+  const newQuantity = req.body.quantity;
+  try {
+    const product = await pm.getProductById(pid);
+    if (!product) {
+      return res.status(400).json({
+        msg: `El producto con el id ${pid} no existe`,
+        ok: false,
+      });
+    } else {
+      const cart = await cm.getCartByUsername(cid);
+
+      if (!cart) {
+        return res.status(400).json({
+          msg: `El carrito no existe`,
+          ok: false,
+        });
+      } else {
+        const findProduct = cart.products.find(
+          (product) => product._id.toString() === pid
+        );
+        if (!findProduct) {
+          return res.status(400).json({
+            msg: `El producto no existe en el carrito`,
+            ok: false,
+          });
+        } else {
+          findProduct.quantity = newQuantity
+          const cartToUpdate = await cm.updateCartProducts(cart);
+          res.json({
+            msg: "Cantidad del producto actualizada correctamente",
+            cartToUpdate,
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      msg: "Error al actualizar el  producto",
+    });
+  }
+});
 
 router.delete("/:cid", async (req, res) => {
-  const cid = req.params.cid
-  try{
+  const cid = req.params.cid;
+  try {
     const cart = await cm.getCartByUsername(cid);
-    console.log(cart.products)
     if (!cart) {
       return res.status(400).json({
         msg: `El carrito no existe`,
         ok: false,
       });
-    } else{
-      cart.products.splice(0,cart.products.length)
-      cart.quantityTotal = 0
-      cart.priceTotal = 0
+    } else {
+      cart.products.splice(0, cart.products.length);
+      cart.quantityTotal = 0;
+      cart.priceTotal = 0;
       const cartToUpdate = await cm.updateCartProducts(cart);
       res.json({
         msg: "Carrito vaciado correctamente",
