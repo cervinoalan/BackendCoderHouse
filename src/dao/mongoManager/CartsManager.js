@@ -82,6 +82,8 @@ class CartsManager {
       });
     }
   };
+
+  deleteCartProduct = async (cart) => {}
 }
 
 module.exports = CartsManager;

@@ -96,7 +96,6 @@ router.post("/:cid/product/:pid", async (req, res) => {
             cartToUpdate,
           });
         } else {
-          console.log(findProduct)
           findProduct.quantity++;
           cart.priceTotal = cart.products.reduce(
             (Acomulador, ProductoActual) =>
@@ -141,9 +140,19 @@ router.delete("/:cid/product/:pid", async (req, res) => {
         const findProduct = cart.products.find(
           (product) => product._id.toString() === pid
         );
-        console.log(findProduct);
+        if(!findProduct){
+          return res.status(400).json({
+            msg: `El producto no existe en el carrito`,
+            ok: false,
+          });
+        }
         if (findProduct.quantity === 1) {
-          cart.products = cart.products.filter((prod) => prod.id !== pid);
+          cart.products = cart.products.filter((prod) => prod._id.toString() !== pid);
+          const cartToUpdate = await cm.updateCartProducts(cart);
+          res.json({
+            msg: "Produto eliminado del carrito",
+            cartToUpdate,
+          })
         } else {
           findProduct.quantity--;
         }
