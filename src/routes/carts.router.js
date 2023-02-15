@@ -23,20 +23,20 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req,res) => {
+router.get("/", async (req, res) => {
   try {
-    const carts = await cm.getCarts()
+    const carts = await cm.getCarts();
     res.json({
       msg: "Carritos encontrados",
       carts,
     });
-  } catch(error){
+  } catch (error) {
     return res.status(500).json({
       msg: "error",
       payload: "Error al buscar los carritos",
     });
   }
-})
+});
 
 router.get("/:cid", async (req, res) => {
   const cid = req.params.cid;
@@ -69,7 +69,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
         const newCart = {
           priceTotal: product.price,
           quantityTotal: 1,
-          products: [product],
+          products: [{ _id: pid, quantity: 1 }],
           username: cid,
         };
         const cartToSave = await cm.addProductToCart(newCart);
@@ -78,41 +78,76 @@ router.post("/:cid/product/:pid", async (req, res) => {
           cartToSave,
         });
       } else {
-        const findProduct = cart.products.find((product) => product.id === pid);
+        const findProduct = cart.products.find((product) => product._id === pid);
+        console.log(findProduct)
         if (!findProduct) {
-          cart.products.push(product);
-          cart.quantity = cart.quantity + 1;
+          cart.products.push({ _id: pid });
+          cart.quantityTotal = cart.quantityTotal + 1;
           cart.priceTotal = cart.products.reduce(
             (Acumulador, ProductoActual) =>
               Acumulador + ProductoActual.quantity,
             0
           );
-
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
-            msg: "Produto agregado la carrito",
+            msg: "Produto agregado al carrito",
             cartToUpdate,
           });
         }
       }
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(404).json({
       msg: "Error al agregar producto",
     });
   }
 });
 
-// router.delete("/:cid/product/:pid", async (req, res) => {
-//   const {cid, pid} = req.params
-//   const cart = getCartByUsername(cid);
-//   const findProduct = cart.products.find((product) => product.id === pid);
-//   console.log(findProduct)
-//   try{
-//     const deletedProduct = 
-//   }
-// });
+router.delete("/:cid/product/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+  try {
+    const product = await pm.getProductById(pid);
+    if (!product) {
+      return res.status(400).json({
+        msg: `El producto con el id ${pid} no existe`,
+        ok: false,
+      });
+    } else {
+      const cart = await cm.getCartByUsername(cid);
+
+      if (!cart) {
+        return res.status(400).json({
+          msg: `El carrito no existe`,
+          ok: false,
+        });
+      } else {
+        const findProduct = cart.products.find((product) => product.id === pid);
+        if (findProduct.quantity === 1) {
+          cart.products = cart.products.filter((prod) => prod.id !== pid);
+        } else {
+          findProduct.quantity--;
+        }
+        cart.quantityTotal = cart.quantityTotal - 1;
+        const total = cart.products.reduce(
+          (acumulador, total) => acumulador + product.price * total.quantity,
+          0
+        );
+        cart.priceTotal = total;
+        const cartToUpdate = await cm.updateCartProducts(cart);
+        res.json({
+          msg: "Produto eliminado del carrito",
+          cartToUpdate,
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      msg: "Error al eliminar el  producto",
+    });
+  }
+});
 
 router.put("/:cid", async (req, res) => {});
 
