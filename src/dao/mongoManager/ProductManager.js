@@ -18,8 +18,11 @@ class ProductManager {
   };
 
   getProducts = async (page = 1, limit = 10, query = {}) => {
-    try{
-      const products = await productModel.paginate(query,{page, limit: limit})
+    try {
+      const products = await productModel.paginate(query, {
+        page,
+        limit: limit,
+      });
       return products;
     } catch (error) {
       return res.status(500).json({

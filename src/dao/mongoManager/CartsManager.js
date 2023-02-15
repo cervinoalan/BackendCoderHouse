@@ -34,7 +34,6 @@ class CartsManager {
       const cart = await cartsModel
         .findOne({ username })
         .populate("products.product");
-        console.log(JSON.stringify(cart))
       return cart;
     } catch (error) {
       return res.status(500).json({

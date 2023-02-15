@@ -70,7 +70,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
         const newCart = {
           priceTotal: product.price,
           quantityTotal: 1,
-          products: [{ id: pid, quantity: 1 }],
+          products: [{ product: pid, quantity: 1 }],
           username: cid,
         };
         const cartToSave = await cm.addProductToCart(newCart);
@@ -79,11 +79,12 @@ router.post("/:cid/product/:pid", async (req, res) => {
           cartToSave,
         });
       } else {
-        const findProduct = cart.products.find(
-          (product) => product.id.toString() === pid
-        );
+        const findProduct = cart.products.find((product) => product._id.toString() === pid);
+        console.log(product)
+        console.log(product.title)
+        console.log(findProduct);
         if (!findProduct) {
-          cart.products.push({ id: pid, quantity: 1 });
+          cart.products.push({ product: pid, quantity: 1 });
           cart.quantityTotal = cart.quantityTotal + 1;
           cart.priceTotal = cart.products.reduce(
             (Acumulador, ProductoActual) =>
