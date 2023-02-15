@@ -179,7 +179,32 @@ router.delete("/:cid/product/:pid", async (req, res) => {
   }
 });
 
-router.put("/:cid", async (req, res) => {});
+router.put("/:cid", async (req, res) => {
+  const cid = req.params;
+  const newProducts = req.body;
+  try {
+    const cart = await cm.getCartByUsername(cid);
+
+    if (!cart) {
+      return res.status(400).json({
+        msg: `El carrito no existe`,
+        ok: false,
+      });
+    } else {
+      cart.products = newProducts;
+      const cartToUpdate = await cm.updateCartProducts(cart);
+      res.json({
+        msg: "Productos actualizados correctamente",
+        cartToUpdate,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      msg: "Error al actualizar el  producto",
+    });
+  }
+});
 
 router.put("/:cid/product/:pid", async (req, res) => {
   const { cid, pid } = req.params;
@@ -209,7 +234,7 @@ router.put("/:cid/product/:pid", async (req, res) => {
             ok: false,
           });
         } else {
-          findProduct.quantity = newQuantity
+          findProduct.quantity = newQuantity;
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Cantidad del producto actualizada correctamente",
@@ -236,7 +261,7 @@ router.delete("/:cid", async (req, res) => {
         ok: false,
       });
     } else {
-      cart.products.splice(0, cart.products.length);
+      cart.products = [];
       cart.quantityTotal = 0;
       cart.priceTotal = 0;
       const cartToUpdate = await cm.updateCartProducts(cart);
