@@ -181,6 +181,32 @@ router.put("/:cid", async (req, res) => {});
 
 router.put("/:cid/product/:pid", async (req, res) => {});
 
-router.delete("/:cid", async (req, res) => {});
+router.delete("/:cid", async (req, res) => {
+  const cid = req.params.cid
+  try{
+    const cart = await cm.getCartByUsername(cid);
+    console.log(cart.products)
+    if (!cart) {
+      return res.status(400).json({
+        msg: `El carrito no existe`,
+        ok: false,
+      });
+    } else{
+      cart.products.splice(0,cart.products.length)
+      cart.quantityTotal = 0
+      cart.priceTotal = 0
+      const cartToUpdate = await cm.updateCartProducts(cart);
+      res.json({
+        msg: "Carrito vaciado correctamente",
+        cartToUpdate,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      msg: "Error al vaciar el carrito",
+    });
+  }
+});
 
 module.exports = router;
