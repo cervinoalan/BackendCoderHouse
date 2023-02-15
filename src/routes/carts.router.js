@@ -57,6 +57,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
   const { cid, pid } = req.params;
   try {
     const product = await pm.getProductById(pid);
+    console.log(product)
     if (!product) {
       return res.status(400).json({
         msg: `El producto con el id ${pid} no existe`,
@@ -66,6 +67,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
       const cart = await cm.getCartByUsername(cid);
 
       if (!cart) {
+        console.log(product.price)
         const newCart = {
           priceTotal: product.price,
           quantityTotal: 1,
@@ -78,8 +80,10 @@ router.post("/:cid/product/:pid", async (req, res) => {
           cartToSave,
         });
       } else {
-        const findProduct = cart.products.find((product) => product._id === pid);
-        console.log(findProduct)
+        const findProduct = cart.products.find(
+          (product) => product._id.toString() === pid
+        );
+        console.log(findProduct);
         if (!findProduct) {
           cart.products.push({ _id: pid });
           cart.quantityTotal = cart.quantityTotal + 1;
@@ -88,6 +92,14 @@ router.post("/:cid/product/:pid", async (req, res) => {
               Acumulador + ProductoActual.quantity,
             0
           );
+        } else {
+          findProduct.quantity++;
+          cart.priceTotal = cart.products.reduce(
+            (Acomulador, ProductoActual) =>
+              Acomulador + product.price * ProductoActual.quantity,
+            0
+          );
+          cart.quantityTotal = cart.quantityTotal + 1;
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Produto agregado al carrito",
@@ -122,7 +134,10 @@ router.delete("/:cid/product/:pid", async (req, res) => {
           ok: false,
         });
       } else {
-        const findProduct = cart.products.find((product) => product.id === pid);
+        const findProduct = cart.products.find(
+          (product) => product._id.toString() === pid
+        );
+        console.log(findProduct);
         if (findProduct.quantity === 1) {
           cart.products = cart.products.filter((prod) => prod.id !== pid);
         } else {
