@@ -63,7 +63,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
         ok: false,
       });
     } else {
-      const cart = cm.getCartByUsername(cid);
+      const cart = await cm.getCartByUsername(cid);
 
       if (!cart) {
         const newCart = {
@@ -104,7 +104,15 @@ router.post("/:cid/product/:pid", async (req, res) => {
   }
 });
 
-router.delete("/:cid/product/:pid", async (req, res) => {});
+// router.delete("/:cid/product/:pid", async (req, res) => {
+//   const {cid, pid} = req.params
+//   const cart = getCartByUsername(cid);
+//   const findProduct = cart.products.find((product) => product.id === pid);
+//   console.log(findProduct)
+//   try{
+//     const deletedProduct = 
+//   }
+// });
 
 router.put("/:cid", async (req, res) => {});
 

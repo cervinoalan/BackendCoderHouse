@@ -54,19 +54,33 @@ class CartsManager {
   };
 
   addProductToCart = async (newCart) => {
-    const cart = await cartsModel.create(newCart);
-    return cart;
-  }
+    try {
+      const cart = await cartsModel.create(newCart);
+      return cart;
+    } catch (error) {
+      return res.status(500).json({
+        msg: "error",
+        payload: "Error al agregar producto al Carrito",
+      });
+    }
+  };
 
   updateCartProducts = async (cart) => {
-    const cartUpdated = await cartsModel.findOneAndUpdate(
-      { username: cart.username },
-      cart,
-      {
-        new: true,
-      }
-    );
-    return cartUpdated;
+    try {
+      const cartUpdated = await cartsModel.findOneAndUpdate(
+        { username: cart.username },
+        cart,
+        {
+          new: true,
+        }
+      );
+      return cartUpdated;
+    } catch (error) {
+      return res.status(500).json({
+        msg: "error",
+        payload: "Error al buscar el Carrito",
+      });
+    }
   };
 }
 
