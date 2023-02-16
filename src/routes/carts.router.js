@@ -66,7 +66,6 @@ router.post("/:cid/product/:pid", async (req, res) => {
       const cart = await cm.getCartByUsername(cid);
 
       if (!cart) {
-        console.log(product.price);
         const newCart = {
           priceTotal: product.price,
           quantityTotal: 1,
@@ -79,18 +78,13 @@ router.post("/:cid/product/:pid", async (req, res) => {
           cartToSave,
         });
       } else {
-        const findProduct = cart.products.find((product) => product._id.toString() === pid);
-        console.log(product)
-        console.log(product.title)
-        console.log(findProduct);
+        const findProduct = cart.products.find(
+          (product) => product.product._id.toString() === pid
+        );
         if (!findProduct) {
           cart.products.push({ product: pid, quantity: 1 });
           cart.quantityTotal = cart.quantityTotal + 1;
-          cart.priceTotal = cart.products.reduce(
-            (Acumulador, ProductoActual) =>
-              Acumulador + ProductoActual.quantity,
-            0
-          );
+          cart.priceTotal = cart.priceTotal + findProduct.product.price;
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Producto agregado exitosamente",
@@ -100,7 +94,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
           findProduct.quantity++;
           cart.priceTotal = cart.products.reduce(
             (Acomulador, ProductoActual) =>
-              Acomulador + product.price * ProductoActual.quantity,
+              Acomulador + findProduct.product.price * ProductoActual.quantity,
             0
           );
           cart.quantityTotal = cart.quantityTotal + 1;
