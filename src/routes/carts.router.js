@@ -81,10 +81,11 @@ router.post("/:cid/product/:pid", async (req, res) => {
         const findProduct = cart.products.find(
           (product) => product.product._id.toString() === pid
         );
+        console.log(findProduct)
         if (!findProduct) {
           cart.products.push({ product: pid, quantity: 1 });
           cart.quantityTotal = cart.quantityTotal + 1;
-          cart.priceTotal = cart.priceTotal + findProduct.product.price;
+          cart.priceTotal = cart.priceTotal + product.price;
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Producto agregado exitosamente",
