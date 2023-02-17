@@ -6,63 +6,35 @@ class ProductManager {
   }
 
   addProduct = async (product) => {
-      const productSaved = await productModel.create(product);
-      return productSaved;
+    const productSaved = await productModel.create(product);
+    return productSaved;
   };
 
   getProducts = async (page = 1, limit = 10, sort = "", query = {}) => {
-    try {
-      const products = await productModel.paginate(query, {
-        page,
-        limit: limit,
-        sort: { price: `${sort}` },
-      });
-      return products;
-    } catch (error) {
-      return res.status(500).json({
-        msg: "error",
-        payload: "Error al Mostrar Producto",
-      });
-    }
+    const products = await productModel.paginate(query, {
+      page,
+      limit: limit,
+      sort: { price: `${sort}` },
+    });
+    return products;
   };
 
   getProductById = async (id) => {
-    try {
-      const product = await productModel.find({ _id: id });
-      return product;
-    } catch (error) {
-      return res.status(500).json({
-        msg: "error",
-        payload: "Error al Buscar Producto",
-      });
-    }
+    const product = await productModel.find({ _id: id });
+    return product;
   };
 
   updateProduct = async (id, newProduct) => {
-    try {
-      const productUpdated = await productModel.updateOne(
-        { _id: id },
-        newProduct
-      );
-      return productUpdated;
-    } catch (error) {
-      return res.status(500).json({
-        msg: "error",
-        payload: "Error al Actualizar Producto",
-      });
-    }
+    const productUpdated = await productModel.updateOne(
+      { _id: id },
+      newProduct
+    );
+    return productUpdated;
   };
 
   deleteProduct = async (id) => {
-    try {
-      const productDeleted = await productModel.deleteOne({ _id: id });
-      return productDeleted;
-    } catch (error) {
-      return res.status(500).json({
-        msg: "error",
-        payload: "Error al Eliminar Producto",
-      });
-    }
+    const productDeleted = await productModel.deleteOne({ _id: id });
+    return productDeleted;
   };
 }
 

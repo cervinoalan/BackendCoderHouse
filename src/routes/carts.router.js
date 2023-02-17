@@ -11,11 +11,10 @@ router.post("/", async (req, res) => {
   try {
     const createCart = await cm.createCart(cart);
     res.json({
-      msg: "Carritos creado exitosamente",
+      msg: "Carrito creado exitosamente",
       createCart,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       msg: "error",
       payload: "Error al Crear el Carrito",
@@ -72,7 +71,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
           products: [{ product: pid, quantity: 1 }],
           username: cid,
         };
-        const cartToSave = await cm.addProductToCart(newCart);
+        const cartToSave = await cm.createCart(newCart);
         res.json({
           msg: "Producto agregado exitosamente",
           cartToSave,
