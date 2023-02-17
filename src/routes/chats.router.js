@@ -9,11 +9,13 @@ router.get("/", async (req, res) => {
         const messages = await cm.getMessages()
         res.json({
             msg: "Mensajes encontrados",
-            data: messages,
+            status: "success",
+            payload: messages,
           });
     } catch (error) {
-        res.status(404).json({
+        res.status(500).json({
         msg: `Ocurrio un error al intentar buscar el/los mensajes`,
+        status: "error",
         });
     }
 });
@@ -24,12 +26,14 @@ router.post("/", async (req, res) => {
     const messageSaved = await cm.sendMessage(message);
     res.json({
       msg: "Mensaje enviado",
-      data: messageSaved,
+      status: "success",
+      payload: messageSaved,
     });
     emitAddMessage(message);
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       msg: `Ocurrio un error al enviar el mensaje`,
+      status: "error",
     });
   }
 });
