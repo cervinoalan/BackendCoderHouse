@@ -81,7 +81,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
         const findProduct = cart.products.find(
           (product) => product.product._id.toString() === pid
         );
-        console.log(findProduct)
+        console.log(findProduct);
         if (!findProduct) {
           cart.products.push({ product: pid, quantity: 1 });
           cart.quantityTotal = cart.quantityTotal + 1;

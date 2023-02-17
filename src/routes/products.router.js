@@ -5,17 +5,17 @@ const multerUtils = require("../multer.utils");
 const { emitDeleteProduct, emitAddProduct } = require("./utils/socket.io");
 const router = Router();
 
-const pm = new ProductManager()
+const pm = new ProductManager();
 
 router.get("/", async (req, res) => {
-  const { limit , page, ...query } = req.query
-  try{
-    const products = await pm.getProducts( page, limit, query )
+  const { limit, page, sort, ...query } = req.query;
+  try {
+    const products = await pm.getProducts(page, limit, sort, query);
     res.json({
-            msg: "Productos encontrados",
-            status: "success",
-            payload: products,
-           });
+      msg: "Productos encontrados",
+      status: "success",
+      payload: products,
+    });
   } catch (error) {
     res.status(404).json({
       msg: `Ocurrio un error al intentar buscar los productos`,
@@ -39,7 +39,7 @@ router.get("/:pid", async (req, res) => {
   }
 });
 
-router.post("/",multerUtils.single("thumbnail"), async (req, res) => {
+router.post("/", multerUtils.single("thumbnail"), async (req, res) => {
   let data = req.body;
   try {
     let newProduct = await pm.addProduct(data);
@@ -81,7 +81,7 @@ router.delete("/:pid", async (req, res) => {
       product,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(404).json({
       msg: `No fue posible eliminar el producto`,
       error: error.message,

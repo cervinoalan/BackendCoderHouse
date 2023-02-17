@@ -6,22 +6,16 @@ class ProductManager {
   }
 
   addProduct = async (product) => {
-    try {
       const productSaved = await productModel.create(product);
       return productSaved;
-    } catch (error) {
-      return res.status(500).json({
-        msg: "error",
-        payload: "Error al Agregar Producto",
-      });
-    }
   };
 
-  getProducts = async (page = 1, limit = 10, query = {}) => {
+  getProducts = async (page = 1, limit = 10, sort = "", query = {}) => {
     try {
       const products = await productModel.paginate(query, {
         page,
         limit: limit,
+        sort: { price: `${sort}` },
       });
       return products;
     } catch (error) {
