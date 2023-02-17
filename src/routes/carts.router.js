@@ -1,21 +1,31 @@
 const { Router } = require("express");
 const CartsManager = require("../dao/mongoManager/CartsManager");
 const ProductManager = require("../dao/mongoManager/ProductManager");
+const { mapProductCart, calculateCartTotal } = require("./utils/carts.utils");
 const router = Router();
 
 const pm = new ProductManager();
 const cm = new CartsManager();
 
 router.post("/", async (req, res) => {
-  const cart = req.body;
   try {
+    const { products = [], username } = req.body;
+
+    let { productCartList, productsNotFound } = await mapProductCart(products);
+    const cart = {
+      totalPrice: "",
+      totalQuantity: productCartList.length,
+      products: productCartList,
+      username: username,
+    };
     const createCart = await cm.createCart(cart);
     res.json({
       msg: "Carrito creado exitosamente",
       status: "success",
-      createCart,
+      payload: { createCart, productsNotFound },
     });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({
       msg: "Error al Crear el Carrito",
       status: "error",

@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const cartsSchema = new mongoose.Schema({
-  priceTotal: {
+  totalPrice: {
     type: Number,
     default: 0,
   },
-  quantityTotal: {
+  totalQuantity: {
     type: Number,
     default: 0,
   },
@@ -20,7 +20,9 @@ const cartsSchema = new mongoose.Schema({
           type: Number,
           default: 1,
         },
-
+        unitValue: {
+          type: Number,
+        },
       },
     ],
     default: [],
