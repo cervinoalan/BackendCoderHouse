@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
       payload: products,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       msg: `Ocurrio un error al intentar buscar los productos`,
       status: "error",
     });
@@ -30,11 +30,13 @@ router.get("/:pid", async (req, res) => {
     let product = await pm.getProductById(productId);
     res.json({
       msg: "Producto encontrado",
+      status: "success",
       payload: product,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       msg: `No existe un producto con el id: ${productId}`,
+      status: "error",
     });
   }
 });
@@ -46,11 +48,13 @@ router.post("/", multerUtils.single("thumbnail"), async (req, res) => {
     emitAddProduct(data);
     res.json({
       msg: "Producto agregado correctamente",
+      status: "success",
       newProduct,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       msg: `No fue posible agregar el producto`,
+      status: "error",
     });
   }
 });
@@ -62,11 +66,13 @@ router.put("/:pid", async (req, res) => {
     let product = await pm.updateProduct(productId, newProduct);
     res.json({
       msg: "Producto actualizado correctamente",
+      status: "success",
       product,
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       msg: `No fue posible actualizar el producto`,
+      status: "error",
     });
   }
 });
@@ -78,13 +84,14 @@ router.delete("/:pid", async (req, res) => {
     emitDeleteProduct(productId);
     res.json({
       msg: "Producto eliminado correctamente",
+      status: "success",
       product,
     });
   } catch (error) {
     console.log(error);
-    res.status(404).json({
+    res.status(500).json({
       msg: `No fue posible eliminar el producto`,
-      error: error.message,
+      status: "error",
     });
   }
 });
