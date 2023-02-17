@@ -1,5 +1,5 @@
 const multer = require('multer');
-const { URL_SERVICE } = require("./constanst");
+const { URL_SERVICE } = require("./routes/utils/constanst");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

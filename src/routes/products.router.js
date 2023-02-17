@@ -1,7 +1,7 @@
 const { Router } = require("express");
 // const productManager = require("../dao/fileSystemManagar/ProductManager");
 const ProductManager = require("../dao/mongoManager/ProductManager");
-const multerUtils = require("./utils/multer.utils");
+const multerUtils = require("../multer.utils");
 const { emitDeleteProduct, emitAddProduct } = require("./utils/socket.io");
 const router = Router();
 
