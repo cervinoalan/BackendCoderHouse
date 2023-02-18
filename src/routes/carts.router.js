@@ -147,7 +147,7 @@ router.delete("/:cid/product/:pid", async (req, res) => {
         });
       } else {
         const findProduct = cart.products.find(
-          (product) => product._id.toString() === pid
+          (product) => product.product._id.toString() === pid
         );
         if (!findProduct) {
           return res.status(400).json({
@@ -157,8 +157,10 @@ router.delete("/:cid/product/:pid", async (req, res) => {
         }
         if (findProduct.quantity === 1) {
           cart.products = cart.products.filter(
-            (prod) => prod._id.toString() !== pid
+            (product) => product.product._id.toString() !== pid
           );
+          cart.totalQuantity = cart.totalQuantity - 1;
+          cart.totalPrice = cart.totalPrice - findProduct.product.price;
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Produto eliminado del carrito",
@@ -167,19 +169,15 @@ router.delete("/:cid/product/:pid", async (req, res) => {
           });
         } else {
           findProduct.quantity--;
+          cart.totalQuantity = cart.totalQuantity - 1;
+          cart.totalPrice = cart.totalPrice - findProduct.product.price;
+          const cartToUpdate = await cm.updateCartProducts(cart);
+          res.json({
+            msg: "Produto eliminado del carrito",
+            status: "success",
+            payload: cartToUpdate,
+          });
         }
-        cart.quantityTotal = cart.quantityTotal - 1;
-        const total = cart.products.reduce(
-          (acumulador, total) => acumulador + product.price * total.quantity,
-          0
-        );
-        cart.priceTotal = total;
-        const cartToUpdate = await cm.updateCartProducts(cart);
-        res.json({
-          msg: "Produto eliminado del carrito",
-          status: "success",
-          payload: cartToUpdate,
-        });
       }
     }
   } catch (error) {
