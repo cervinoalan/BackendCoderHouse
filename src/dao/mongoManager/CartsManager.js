@@ -27,15 +27,8 @@ class CartsManager {
     return cart;
   };
 
-  updateCartProducts = async (cart) => {
-    const cartUpdated = await cartsModel.findOneAndUpdate(
-      { username: cart.username },
-      cart,
-      {
-        new: true,
-      }
-    );
-    return cartUpdated;
+  updateCart = async (cid, cart) => {
+    return await cartsModel.updateOne({ username: cid }, cart);
   };
 }
 

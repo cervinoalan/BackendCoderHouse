@@ -190,8 +190,8 @@ router.delete("/:cid/product/:pid", async (req, res) => {
 });
 
 router.put("/:cid", async (req, res) => {
-  const cid = req.params;
-  const newProducts = req.body;
+  const {cid}  = req.params;
+  const { products = [] } = req.body;
   try {
     const cart = await cm.getCartByUsername(cid);
 
@@ -201,16 +201,21 @@ router.put("/:cid", async (req, res) => {
         status: "error",
       });
     } else {
-      cart.products = newProducts;
-      const cartToUpdate = await cm.updateCartProducts(cart);
+      let { productCartList, productsNotFound, cartTotalQuantity } =
+      await mapProductCart(products);
+    const newCart = {
+      totalPrice: calculateCartTotal(productCartList),
+      totalQuantity: cartTotalQuantity,
+      products: productCartList,
+      }
+      const cartToUpdate = await cm.updateCart(cid, newCart);
       res.json({
         msg: "Productos actualizados correctamente",
         status: "success",
-        payload: cartToUpdate,
+        payload: {cartToUpdate, productsNotFound}
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(404).json({
       msg: "Error al actualizar el  producto",
       status: "error",
