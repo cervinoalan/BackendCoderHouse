@@ -11,11 +11,11 @@ router.post("/", async (req, res) => {
   try {
     const { products = [], username } = req.body;
 
-    let { productCartList, productsNotFound } = await mapProductCart(products);
-    console.log(productCartList)
+    let { productCartList, productsNotFound, cartTotalQuantity } =
+      await mapProductCart(products);
     const cart = {
-      totalPrice: "",
-      totalQuantity: productCartList.length,
+      totalPrice: calculateCartTotal(productCartList),
+      totalQuantity: cartTotalQuantity,
       products: productCartList,
       username: username,
     };
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
       payload: { createCart, productsNotFound },
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       msg: "Error al Crear el Carrito",
       status: "error",

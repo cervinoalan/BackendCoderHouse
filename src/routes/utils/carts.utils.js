@@ -1,44 +1,47 @@
-const ProductManager = require('../../dao/mongoManager/ProductManager')
+const ProductManager = require("../../dao/mongoManager/ProductManager");
 
-const pm = new ProductManager()
+const pm = new ProductManager();
 
 const calculateCartTotal = (products) => {
-    const result = products.reduce(
-        (acc, curr) => acc + curr.unitValue * curr.quantity,
-        0
-    )
-    return result
-    
-}
+  const result = products.reduce(
+    (acc, curr) => acc + curr.unitValue * curr.quantity,
+    0
+  );
+  return result;
+};
 
-const mapProductCart = async(products) => {
-    let productCartList = []
-    let productsNotFound = []
+const mapProductCart = async (products) => {
+  let productCartList = [];
+  let productsNotFound = [];
+  let cartTotalQuantity = 0;
 
-    for (const idProduct of products) {
-        const indexProduct = productCartList.findIndex(({product} ) => product === idProduct)
+  for (const idProduct of products) {
+    const indexProduct = productCartList.findIndex(
+      ({ product }) => product === idProduct
+    );
 
-        if (indexProduct === -1) {
-            const productDb = await pm.getProductById(idProduct)
-            console.log(productDb.price)
-            if (productDb) {
-                productCartList.push({
-                    product: idProduct,
-                    quantity: 1,
-                    unitValue: productDb.price,
-                })
-            }else{
-                productsNotFound.push(idProduct)
-            }
-        } else {
-            productCartList[indexProduct].quantity++
-        }
+    if (indexProduct === -1) {
+      const productDb = await pm.getProductById(idProduct);
+      if (productDb) {
+        productCartList.push({
+          product: idProduct,
+          quantity: 1,
+          unitValue: productDb[0].price,
+        });
+        cartTotalQuantity++;
+      } else {
+        productsNotFound.push(idProduct);
+      }
+    } else {
+      productCartList[indexProduct].quantity++;
+      cartTotalQuantity++;
     }
+  }
 
-    return {productCartList, productsNotFound};
-}
+  return { productCartList, productsNotFound, cartTotalQuantity };
+};
 
 module.exports = {
-    calculateCartTotal,
-    mapProductCart
-}
+  calculateCartTotal,
+  mapProductCart,
+};
