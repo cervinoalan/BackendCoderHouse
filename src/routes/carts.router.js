@@ -190,7 +190,7 @@ router.delete("/:cid/product/:pid", async (req, res) => {
 });
 
 router.put("/:cid", async (req, res) => {
-  const {cid}  = req.params;
+  const { cid } = req.params;
   const { products = [] } = req.body;
   try {
     const cart = await cm.getCartByUsername(cid);
@@ -202,17 +202,17 @@ router.put("/:cid", async (req, res) => {
       });
     } else {
       let { productCartList, productsNotFound, cartTotalQuantity } =
-      await mapProductCart(products);
-    const newCart = {
-      totalPrice: calculateCartTotal(productCartList),
-      totalQuantity: cartTotalQuantity,
-      products: productCartList,
-      }
+        await mapProductCart(products);
+      const newCart = {
+        totalPrice: calculateCartTotal(productCartList),
+        totalQuantity: cartTotalQuantity,
+        products: productCartList,
+      };
       const cartToUpdate = await cm.updateCart(cid, newCart);
       res.json({
         msg: "Productos actualizados correctamente",
         status: "success",
-        payload: {cartToUpdate, productsNotFound}
+        payload: { cartToUpdate, productsNotFound },
       });
     }
   } catch (error) {
@@ -246,7 +246,7 @@ router.put("/:cid/product/:pid", async (req, res) => {
           (product) => product.product._id.toString() === pid
         );
         if (!findProduct) {
-          console.log(cart.products)
+          console.log(cart.products);
           return res.status(400).json({
             msg: `El producto no existe en el carrito`,
             status: "error",
@@ -254,7 +254,7 @@ router.put("/:cid/product/:pid", async (req, res) => {
         } else {
           findProduct.quantity += newQuantity;
           cart.totalQuantity += newQuantity;
-          cart.totalPrice += findProduct.product.price * newQuantity
+          cart.totalPrice += findProduct.product.price * newQuantity;
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Cantidad del producto actualizada correctamente",
