@@ -12,6 +12,7 @@ router.post("/", async (req, res) => {
     const { products = [], username } = req.body;
 
     let { productCartList, productsNotFound } = await mapProductCart(products);
+    console.log(productCartList)
     const cart = {
       totalPrice: "",
       totalQuantity: productCartList.length,

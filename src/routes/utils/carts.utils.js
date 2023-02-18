@@ -20,7 +20,7 @@ const mapProductCart = async(products) => {
 
         if (indexProduct === -1) {
             const productDb = await pm.getProductById(idProduct)
-
+            console.log(productDb.price)
             if (productDb) {
                 productCartList.push({
                     product: idProduct,
