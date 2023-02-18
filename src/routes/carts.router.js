@@ -238,15 +238,18 @@ router.put("/:cid/product/:pid", async (req, res) => {
         });
       } else {
         const findProduct = cart.products.find(
-          (product) => product._id.toString() === pid
+          (product) => product.product._id.toString() === pid
         );
         if (!findProduct) {
+          console.log(cart.products)
           return res.status(400).json({
             msg: `El producto no existe en el carrito`,
             status: "error",
           });
         } else {
-          findProduct.quantity = newQuantity;
+          findProduct.quantity += newQuantity;
+          cart.totalQuantity += newQuantity;
+          cart.totalPrice += findProduct.product.price * newQuantity
           const cartToUpdate = await cm.updateCartProducts(cart);
           res.json({
             msg: "Cantidad del producto actualizada correctamente",
