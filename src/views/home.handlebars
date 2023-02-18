@@ -3,14 +3,14 @@
 </div>
 
 {{#each products}}
-  <div>
-    <h2>{{this.title}}</h2>
-    <img src={{this.thumbnail}} alt={{this.title}} />
-    <p>Descripcion: {{this.description}}</p>
-    <p><strong>Precio: ${{this.price}}</strong></p>
-    <p>Cantidad disponible: {{this.stock}}</p>
-  </div>
-
+ <div class="card" style="width: 15rem;">
+    <img class="card-img-top" src={{this.thumbnail}} alt={{this.title}}>
+    <div class="card-body">
+    <h5 class="card-title">{{this.title}}</h5>
+    <p class="card-text"><strong>${{this.price}}</strong></p>
+    <button id="btnCompra-{{this.id}}" class="btn btn-dark">COMPRAR</button>
+    </div>
+    </div>
 {{/each}}
 
 <script src="/js/index.js"></script>
