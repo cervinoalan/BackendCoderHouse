@@ -276,8 +276,8 @@ router.delete("/:cid", async (req, res) => {
       });
     } else {
       cart.products = [];
-      cart.quantityTotal = 0;
-      cart.priceTotal = 0;
+      cart.totalQuantity = 0;
+      cart.totalPrice = 0;
       const cartToUpdate = await cm.updateCartProducts(cart);
       res.json({
         msg: "Carrito vaciado correctamente",
