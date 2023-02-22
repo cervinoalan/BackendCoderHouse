@@ -1,7 +1,8 @@
 <div>
-  <h1>Lista de productos: </h1>
+  <h1>Bienvenido {{name}} {{lastname}} </h1>
+  <button id="btnLogout" class="btn btn-dark">Cerrar Sesion</button>
 </div>
-
+<h2>Lista de productos: </h2>
 <div class="d-flex justify-content-around">
   {{#each products}}
 
@@ -16,3 +17,4 @@
   {{/each}}
 </div>
 <script src="/js/index.js"></script>
+<script src="/js/logout.js"></script>

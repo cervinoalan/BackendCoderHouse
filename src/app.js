@@ -8,6 +8,24 @@ const { connectSocket } = require("./routes/utils/socket.io");
 const mongoose = require("mongoose");
 const chatsRouter = require("./routes/chats.router");
 const PORT = 8080;
+const session = require("express-session");
+const MongoConnect = require("connect-mongo");
+const sessionRouter = require("./routes/session.router");
+
+//session
+app.use(
+  session({
+    store: MongoConnect.create({
+      mongoUrl:
+        "mongodb+srv://admin:uFpp5fwiUQpikQrx@cluster0.cdoqp1h.mongodb.net/?retryWrites=true&w=majority",
+      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+      ttl: 300,
+    }),
+    secret: "DASDSADSADVFGDDFBGFDBDGB",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 //handlebars
 app.engine("handlebars", handlebars.engine());
@@ -24,6 +42,7 @@ app.use("/api/products", productRouter);
 app.use("/api/chats", chatsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
+app.use("/api/session", sessionRouter);
 
 //socket.io
 const httpServer = app.listen(PORT, () => {

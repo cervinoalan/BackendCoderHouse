@@ -1,3 +1,4 @@
+
 const socket = io();
 
 socket.on("init-products", ({ products }) => {
@@ -29,7 +30,3 @@ socket.on("add-product", ({ data }) => {
   main.innerHTML += `<li id=${data._id}> ${data.title} </li>`;
 });
 
-
-
-
-        // <li id=${product._id}> ${product.title} </li>
