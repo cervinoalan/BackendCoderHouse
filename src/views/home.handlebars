@@ -2,15 +2,17 @@
   <h1>Lista de productos: </h1>
 </div>
 
-{{#each products}}
- <div class="card" style="width: 15rem;">
-    <img class="card-img-top" src={{this.thumbnail}} alt={{this.title}}>
-    <div class="card-body">
-    <h5 class="card-title">{{this.title}}</h5>
-    <p class="card-text"><strong>${{this.price}}</strong></p>
-    <button id="btnCompra-{{this.id}}" class="btn btn-dark">COMPRAR</button>
-    </div>
-    </div>
-{{/each}}
+<div class="d-flex justify-content-around">
+  {{#each products}}
 
+    <div class="card" style="width: 15rem;">
+      <img class="card-img-top" src={{this.thumbnail}} alt={{this.title}} />
+      <div class="card-body">
+        <h5 class="card-title">{{this.title}}</h5>
+        <p class="card-text"><strong>${{this.price}}</strong></p>
+        <button id="btnCompra-{{this.id}}" class="btn btn-dark">COMPRAR</button>
+      </div>
+    </div>
+  {{/each}}
+</div>
 <script src="/js/index.js"></script>

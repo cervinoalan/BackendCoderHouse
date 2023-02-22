@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     price: products.price,
     stock: products.stock,
     thumbnail: products.thumbnail,
-    code:products.code
+    code: products.code,
   }));
   res.render("home", {
     products: view,
@@ -44,8 +44,8 @@ router.get("/products", async (req, res) => {
     price: products.price,
     stock: products.stock,
     thumbnail: products.thumbnail,
-    code:products.code,
-    id: products._id.toString()
+    code: products.code,
+    id: products._id.toString(),
   }));
   res.render("home", {
     products: view,
@@ -56,10 +56,14 @@ router.get("/products", async (req, res) => {
 });
 
 router.get("/carts/:cid", async (req, res) => {
-  const cid = req.params.cid;
-  const cartDb = await cm.getCartByUsername(cid);
-  console.log(cartDb)
-  res.render("cart", { cid, cartDb});
+  const { cid } = req.params;
+  const cart = await cm.getCartByUsername(cid);
+  const vista = cart.products.map((cart) => ({
+    products: cart.product,
+  }));
+  res.render("cart", {
+    vista,
+  });
 });
 
 module.exports = router;
