@@ -47,11 +47,20 @@ router.get("/products", async (req, res) => {
 router.get("/carts/:cid", async (req, res) => {
   const { cid } = req.params;
   const cart = await cm.getCartByUsername(cid);
-  const vista = cart.products.map((cart) => ({
-    products: cart.product,
+  console.log(cart.products)
+  const products = cart.products.map((cart) => ({
+    title: cart.product.title,
+    description: cart.product.description,
+    stock: cart.product.stock,
+    price: cart.product.price,
+    thumbnail: cart.product.thumbnail,
+    code: cart.product.code,
+    id: cart.product._id
   }));
+  console.log(products)
   res.render("cart", {
-    vista,
+    products,
+    cid
   });
 });
 
