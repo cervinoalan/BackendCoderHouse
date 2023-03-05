@@ -21,3 +21,10 @@ formLogin.addEventListener('submit', (e) => {
       window.alert('Error al iniciar sesion');
     });
 });
+
+const signUpButton = document.getElementById('signUpButton');
+
+signUpButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.location.href = '/registrar';
+});
