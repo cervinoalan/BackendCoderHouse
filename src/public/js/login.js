@@ -26,5 +26,5 @@ const signUpButton = document.getElementById('signUpButton');
 
 signUpButton.addEventListener('click', (e) => {
   e.preventDefault();
-  window.location.href = '/registrar';
+  window.location.href = '/register';
 });
