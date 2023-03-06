@@ -1,8 +1,8 @@
-const passport = require('passport');
-const local = require('passport-local');
-const UsersModel = require('../../dao/models/user.model');
-const { hashPassword, comparePassword } = require('./bcrypt');
-const { STRATEGY_REGISTER, LOGIN_STRATEGY } = require('./constants');
+const passport = require("passport");
+const local = require("passport-local");
+const UsersModel = require("../../dao/models/user.model");
+const { hashPassword, comparePassword } = require("./bcrypt");
+const { STRATEGY_REGISTER, LOGIN_STRATEGY } = require("./constants");
 
 const InitPassport = () => {
   passport.use(
@@ -10,8 +10,8 @@ const InitPassport = () => {
     new local.Strategy(
       {
         passReqToCallback: true,
-        usernameField: 'email',
-        passwordField: 'password',
+        usernameField: "email",
+        passwordField: "password",
       },
       async (req, username, password, done) => {
         const { first_name, last_name, age } = req.body;
@@ -51,7 +51,7 @@ passport.use(
   new local.Strategy(
     {
       passReqToCallback: true,
-      usernameField: 'email',
+      usernameField: "email",
     },
     async (req, username, password, done) => {
       try {
@@ -73,9 +73,8 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 passport.deserializeUser(async (_id, done) => {
-  const user = await UsersModel.findById(id);
+  const user = await UsersModel.findById(_id);
   done(null, user);
 });
-
 
 module.exports = InitPassport;

@@ -44,6 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 //passport
 InitPassport();
 app.use(passport.initialize());
+app.use(passport.session());
 
 //rutas
 app.use("/api/products", productRouter);
