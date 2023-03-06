@@ -1,23 +1,11 @@
 const UsersModel = require("../dao/models/user.model");
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await UsersModel.findOne({ email, password });
-  if (user) {
-    req.session.user = user;
-    res.send(user);
-  } else {
-    res.status(401).send("Email o contraseña incorrectos");
-  }
+    res.send(req.user);
 };
 
 const register = async (req, res) => {
-  try {
-    const user = await UsersModel.create(req.body);
-    res.send(user);
-  } catch (error) {
-    res.status(500).send("Error al crear usuario");
-  }
+  res.send(req.user);
 };
 
 const logout = async (req, res) => {

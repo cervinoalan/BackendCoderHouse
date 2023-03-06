@@ -3,7 +3,6 @@ const cartsRouter = require("./routes/carts.router");
 const productRouter = require("./routes/products.router");
 const handlebars = require("express-handlebars");
 const viewsRouter = require("./routes/views.router");
-const app = express();
 const { connectSocket } = require("./routes/utils/socket.io");
 const mongoose = require("mongoose");
 const chatsRouter = require("./routes/chats.router");
@@ -11,6 +10,17 @@ const PORT = 8080;
 const session = require("express-session");
 const MongoConnect = require("connect-mongo");
 const sessionRouter = require("./routes/session.router");
+const InitPassport = require("./routes/utils/passport.config");
+const passport = require("passport");
+
+//init
+const app = express();
+
+//handlebars
+app.engine("handlebars", handlebars.engine());
+app.set("views", __dirname + "/views");
+app.set("view engine", "handlebars");
+app.use(express.static(__dirname + "/public"));
 
 //session
 app.use(
@@ -27,15 +37,13 @@ app.use(
   })
 );
 
-//handlebars
-app.engine("handlebars", handlebars.engine());
-app.set("views", __dirname + "/views");
-app.set("view engine", "handlebars");
-app.use(express.static(__dirname + "/public"));
-
 //express
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//passport
+InitPassport();
+app.use(passport.initialize());
 
 //rutas
 app.use("/api/products", productRouter);

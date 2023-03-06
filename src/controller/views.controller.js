@@ -61,6 +61,7 @@ const renderCart = async (req, res) => {
 };
 
 const renderLogin = async (req, res) => {
+  console.log(req.user)
   if (req.session.user) {
     const products = await pm.getProducts();
     const view = products.docs.map((products) => ({
