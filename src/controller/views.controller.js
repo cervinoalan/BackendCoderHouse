@@ -79,7 +79,7 @@ const renderLogin = async (req, res) => {
       page: !products.page,
       name: req.session.user.first_name,
       lastname: req.session.user.last_name,
-      rol: req.session.user.rol
+      rol: req.session.user.rol,
     });
   } else {
     res.render("login");

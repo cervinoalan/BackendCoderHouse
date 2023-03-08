@@ -44,37 +44,39 @@ const InitPassport = () => {
     const user = await UsersModel.findById(id);
     done(null, user);
   });
-};
 
-passport.use(
-  LOGIN_STRATEGY,
-  new local.Strategy(
-    {
-      passReqToCallback: true,
-      usernameField: "email",
-    },
-    async (req, username, password, done) => {
-      try {
-        const user = await UsersModel.findOne({ email: username });
-
-        const isVadidPassword = await comparePassword(password, user.password);
-        if (user && isVadidPassword) {
-          done(null, user);
-        } else {
+  passport.use(
+    LOGIN_STRATEGY,
+    new local.Strategy(
+      {
+        passReqToCallback: true,
+        usernameField: "email",
+      },
+      async (req, username, password, done) => {
+        try {
+          const user = await UsersModel.findOne({ email: username });
+          const isVadidPassword = await comparePassword(
+            password,
+            user.password
+          );
+          if (user && isVadidPassword) {
+            done(null, user);
+          } else {
+            done(null, false);
+          }
+        } catch (error) {
           done(null, false);
         }
-      } catch (error) {
-        done(null, false);
       }
-    }
-  )
-);
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
-passport.deserializeUser(async (_id, done) => {
-  const user = await UsersModel.findById(_id);
-  done(null, user);
-});
+    )
+  );
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+  passport.deserializeUser(async (_id, done) => {
+    const user = await UsersModel.findById(_id);
+    done(null, user);
+  });
+};
 
 module.exports = InitPassport;

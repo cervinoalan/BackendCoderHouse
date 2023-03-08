@@ -1,7 +1,14 @@
 const UsersModel = require("../dao/models/user.model");
 
 const login = async (req, res) => {
-    res.send(req.user);
+  req.session.user = {
+    first_name: req.user.first_name,
+    last_name: req.user.last_name,
+    age:req.user.age,
+    email:req.user.email,
+    rol:req.user.rol
+  }
+  res.send(req.user);
 };
 
 const register = async (req, res) => {
