@@ -4,10 +4,10 @@ const login = async (req, res) => {
   req.session.user = {
     first_name: req.user.first_name,
     last_name: req.user.last_name,
-    age:req.user.age,
-    email:req.user.email,
-    rol:req.user.rol
-  }
+    age: req.user.age,
+    email: req.user.email,
+    rol: req.user.rol,
+  };
   res.send(req.user);
 };
 

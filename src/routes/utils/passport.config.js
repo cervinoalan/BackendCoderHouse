@@ -1,10 +1,15 @@
+const mongoose = require('mongoose');
 const passport = require("passport");
 const local = require("passport-local");
 const UsersModel = require("../../dao/models/user.model");
 const { hashPassword, comparePassword } = require("./bcrypt");
 const { STRATEGY_REGISTER, LOGIN_STRATEGY } = require("./constants");
+const CartsManager = require("../../dao/mongoManager/CartsManager");
+
+const cm = new CartsManager();
 
 const InitPassport = () => {
+  
   passport.use(
     STRATEGY_REGISTER,
     new local.Strategy(
@@ -21,12 +26,16 @@ const InitPassport = () => {
             done(null, false);
           } else {
             const hash = await hashPassword(password);
+            const cart = await cm.createCart()
+            const cartId = mongoose.Types.ObjectId(cart);
             const user = await UsersModel.create({
               first_name,
               last_name,
               age,
               email: username,
               password: hash,
+              cart: cartId,
+              rol:"usuario",
             });
             done(null, user);
           }

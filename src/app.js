@@ -28,7 +28,7 @@ app.use(
       mongoUrl:
         "mongodb+srv://admin:uFpp5fwiUQpikQrx@cluster0.cdoqp1h.mongodb.net/?retryWrites=true&w=majority",
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 300,
+      ttl: 5000,
     }),
     secret: "DASDSADSADVFGDDFBGFDBDGB",
     resave: true,
