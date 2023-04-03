@@ -2,7 +2,7 @@ const { Router } = require("express");
 const passport = require("passport");
 const router = Router();
 const sessionController = require("../controller/session.controller");
-const { STRATEGY_REGISTER, LOGIN_STRATEGY } = require("./utils/constants");
+const { LOGIN_STRATEGY, REGISTER_STRATEGY } = require("../config/config");
 
 router.post(
   "/login",
@@ -12,7 +12,7 @@ router.post(
 
 router.post(
   "/register",
-  passport.authenticate(STRATEGY_REGISTER),
+  passport.authenticate(REGISTER_STRATEGY),
   sessionController.register
 );
 

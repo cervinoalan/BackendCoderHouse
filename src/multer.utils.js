@@ -1,5 +1,5 @@
 const multer = require('multer');
-const { URL_SERVICE } = require("./routes/utils/constants");
+const { URL_SERVICE } = require("./config/config");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
