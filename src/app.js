@@ -6,12 +6,12 @@ const viewsRouter = require("./routes/views.router");
 const { connectSocket } = require("./routes/utils/socket.io");
 const mongoose = require("mongoose");
 const chatsRouter = require("./routes/chats.router");
-const PORT = 8080;
 const session = require("express-session");
 const MongoConnect = require("connect-mongo");
 const sessionRouter = require("./routes/session.router");
 const InitPassport = require("./routes/utils/passport.config");
 const passport = require("passport");
+const { PORT, MONGO_URL, SECRET } = require("./config/config");
 
 //init
 const app = express();
@@ -25,12 +25,11 @@ app.set("view engine", "handlebars");
 app.use(
   session({
     store: MongoConnect.create({
-      mongoUrl:
-        "mongodb+srv://admin:uFpp5fwiUQpikQrx@cluster0.cdoqp1h.mongodb.net/?retryWrites=true&w=majority",
+      mongoUrl: MONGO_URL,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
       ttl: 5000,
     }),
-    secret: "DASDSADSADVFGDDFBGFDBDGB",
+    secret: SECRET,
     resave: true,
     saveUninitialized: true,
   })
@@ -55,13 +54,13 @@ app.use("/api/session", sessionRouter);
 
 //socket.io
 const httpServer = app.listen(PORT, () => {
-  console.log(`Servidor ejecutado en puerto: ${PORT}`);
+  console.log(`Servidor ejecutado en puerto: ` + PORT);
 });
 
 //mongoose
 mongoose.set("strictQuery", false);
 mongoose.connect(
-  "mongodb+srv://admin:uFpp5fwiUQpikQrx@cluster0.cdoqp1h.mongodb.net/?retryWrites=true&w=majority",
+  MONGO_URL,
 
   (error) => {
     if (error) {
