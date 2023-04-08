@@ -1,15 +1,13 @@
-const ProductManager = require("../dao/mongoManager/ProductManager");
-
+const ProductService = require("../service/products.service");
 const {
   emitDeleteProduct,
   emitAddProduct,
 } = require("../routes/utils/socket.io");
-const pm = new ProductManager();
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, ...query } = req.query;
   try {
-    const products = await pm.getProducts(page, limit, sort, query);
+    const products = await ProductService.getProducts(page, limit, sort, query);
     res.json({
       msg: "Productos encontrados",
       status: "success",
@@ -26,7 +24,7 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   let productId = req.params.pid;
   try {
-    let product = await pm.getProductById(productId);
+    let product = await ProductService.getProductById(productId);
     res.json({
       msg: "Producto encontrado",
       status: "success",
@@ -43,7 +41,7 @@ const getProductById = async (req, res) => {
 const addProduct = async (req, res) => {
   let data = req.body;
   try {
-    let newProduct = await pm.addProduct(data);
+    let newProduct = await ProductService.addProduct(data);
     emitAddProduct(data);
     res.json({
       msg: "Producto agregado correctamente",
@@ -62,7 +60,7 @@ const updateProduct = async (req, res) => {
   let productId = req.params.pid;
   let newProduct = req.body;
   try {
-    let product = await pm.updateProduct(productId, newProduct);
+    let product = await ProductService.updateProduct(productId, newProduct);
     res.json({
       msg: "Producto actualizado correctamente",
       status: "success",
@@ -79,7 +77,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   let productId = req.params.pid;
   try {
-    let product = await pm.deleteProduct(productId);
+    let product = await ProductService.deleteProduct(productId);
     emitDeleteProduct(productId);
     res.json({
       msg: "Producto eliminado correctamente",

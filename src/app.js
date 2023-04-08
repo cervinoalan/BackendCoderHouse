@@ -1,3 +1,4 @@
+const { PORT, MONGO_URL, SECRET } = require("./config/config");
 const express = require("express");
 const cartsRouter = require("./routes/carts.router");
 const productRouter = require("./routes/products.router");
@@ -11,7 +12,6 @@ const MongoConnect = require("connect-mongo");
 const sessionRouter = require("./routes/session.router");
 const InitPassport = require("./routes/utils/passport.config");
 const passport = require("passport");
-const { PORT, MONGO_URL, SECRET } = require("./config/config");
 
 //init
 const app = express();
