@@ -30,6 +30,11 @@ class CartsManager {
   updateCart = async (cid, cart) => {
     return await cartsModel.updateOne({ username: cid }, cart);
   };
+
+  updateCartProducts = async (cart) => {
+    const cartUpdated = await cartsModel.findByIdAndUpdate(cart.id, cart, { new: true });
+    return cartUpdated;
+  };
 }
 
 module.exports = CartsManager;

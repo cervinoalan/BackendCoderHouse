@@ -1,12 +1,10 @@
-const CartsManager = require("../dao/mongoManager/CartsManager");
-const ProductManager = require("../dao/mongoManager/ProductManager");
 const {
   mapProductCart,
   calculateCartTotal,
 } = require("../routes/utils/carts.utils");
+const cartsService = require("../service/carts.service");
+const productsService = require("../service/products.service");
 
-const pm = new ProductManager();
-const cm = new CartsManager();
 
 const createCarts = async (req, res) => {
   try {
@@ -20,7 +18,7 @@ const createCarts = async (req, res) => {
       products: productCartList,
       username: username,
     };
-    const createCart = await cm.createCart(cart);
+    const createCart = await cartsService.createCart(cart);
     res.json({
       msg: "Carrito creado exitosamente",
       status: "success",
@@ -37,7 +35,7 @@ const createCarts = async (req, res) => {
 
 const getCarts = async (req, res) => {
   try {
-    const carts = await cm.getCarts();
+    const carts = await cartsService.getCarts();
     res.json({
       msg: "Carritos encontrados",
       status: "succes",
@@ -54,7 +52,7 @@ const getCarts = async (req, res) => {
 const getCartByUsername = async (req, res) => {
   const cid = req.params.cid;
   try {
-    const cart = await cm.getCartByUsername(cid);
+    const cart = await cartsService.getCartByUsername(cid);
     res.json({
       msg: "Carrito encontrado",
       status: "success",
@@ -71,14 +69,14 @@ const getCartByUsername = async (req, res) => {
 const addProductToCart = async (req, res) => {
   const { cid, pid } = req.params;
   try {
-    const product = await pm.getProductById(pid);
+    const product = await productsService.getProductById(pid);
     if (!product) {
       return res.status(400).json({
         msg: `El producto con el id ${pid} no existe`,
         status: "error",
       });
     } else {
-      const cart = await cm.getCartByUsername(cid);
+      const cart = await cartsService.getCartByUsername(cid);
 
       if (!cart) {
         const newCart = {
@@ -87,7 +85,7 @@ const addProductToCart = async (req, res) => {
           products: [{ product: pid, quantity: 1 }],
           username: cid,
         };
-        const cartToSave = await cm.createCart(newCart);
+        const cartToSave = await cartsService.createCart(newCart);
         res.json({
           msg: "Carrito creado y productos agregados exitosamente",
           status: "success",
@@ -101,7 +99,7 @@ const addProductToCart = async (req, res) => {
           cart.products.push({ product: pid, quantity: 1 });
           cart.totalQuantity = cart.totalQuantity + 1;
           cart.totalPrice = cart.totalPrice + product[0].price;
-          const cartToUpdate = await cm.updateCartProducts(cart);
+          const cartToUpdate = await cartsService.updateCartProducts(cart);
           res.json({
             msg: "Producto agregado exitosamente",
             status: "success",
@@ -111,7 +109,7 @@ const addProductToCart = async (req, res) => {
           findProduct.quantity++;
           cart.totalQuantity = cart.totalQuantity + 1;
           cart.totalPrice = cart.totalPrice + findProduct.product.price;
-          const cartToUpdate = await cm.updateCartProducts(cart);
+          const cartToUpdate = await cartsService.updateCartProducts(cart);
           res.json({
             msg: "Produto agregado al carrito",
             status: "success",
@@ -132,14 +130,14 @@ const addProductToCart = async (req, res) => {
 const deleteProductFromCart = async (req, res) => {
   const { cid, pid } = req.params;
   try {
-    const product = await pm.getProductById(pid);
+    const product = await productsService.getProductById(pid);
     if (!product) {
       return res.status(400).json({
         msg: `El producto con el id ${pid} no existe`,
         ok: false,
       });
     } else {
-      const cart = await cm.getCartByUsername(cid);
+      const cart = await cartsService.getCartByUsername(cid);
 
       if (!cart) {
         return res.status(400).json({
@@ -162,7 +160,7 @@ const deleteProductFromCart = async (req, res) => {
           );
           cart.totalQuantity = cart.totalQuantity - 1;
           cart.totalPrice = cart.totalPrice - findProduct.product.price;
-          const cartToUpdate = await cm.updateCartProducts(cart);
+          const cartToUpdate = await cartsService.updateCartProducts(cart);
           res.json({
             msg: "Produto eliminado del carrito",
             status: "success",
@@ -172,7 +170,7 @@ const deleteProductFromCart = async (req, res) => {
           findProduct.quantity--;
           cart.totalQuantity = cart.totalQuantity - 1;
           cart.totalPrice = cart.totalPrice - findProduct.product.price;
-          const cartToUpdate = await cm.updateCartProducts(cart);
+          const cartToUpdate = await cartsService.updateCartProducts(cart);
           res.json({
             msg: "Produto eliminado del carrito",
             status: "success",
@@ -194,7 +192,7 @@ const updateProductFromCart = async (req, res) => {
   const { cid } = req.params;
   const { products = [] } = req.body;
   try {
-    const cart = await cm.getCartByUsername(cid);
+    const cart = await cartsService.getCartByUsername(cid);
 
     if (!cart) {
       return res.status(400).json({
@@ -209,7 +207,7 @@ const updateProductFromCart = async (req, res) => {
         totalQuantity: cartTotalQuantity,
         products: productCartList,
       };
-      const cartToUpdate = await cm.updateCart(cid, newCart);
+      const cartToUpdate = await cartsService.updateCart(cid, newCart);
       res.json({
         msg: "Productos actualizados correctamente",
         status: "success",
@@ -228,14 +226,14 @@ const updateProductQuantityFromCart = async (req, res) => {
   const { cid, pid } = req.params;
   const newQuantity = req.body.quantity;
   try {
-    const product = await pm.getProductById(pid);
+    const product = await productsService.getProductById(pid);
     if (!product) {
       return res.status(400).json({
         msg: `El producto con el id ${pid} no existe`,
         status: "error",
       });
     } else {
-      const cart = await cm.getCartByUsername(cid);
+      const cart = await cartsService.getCartByUsername(cid);
 
       if (!cart) {
         return res.status(400).json({
@@ -256,7 +254,7 @@ const updateProductQuantityFromCart = async (req, res) => {
           findProduct.quantity += newQuantity;
           cart.totalQuantity += newQuantity;
           cart.totalPrice += findProduct.product.price * newQuantity;
-          const cartToUpdate = await cm.updateCartProducts(cart);
+          const cartToUpdate = await cartsService.updateCartProducts(cart);
           res.json({
             msg: "Cantidad del producto actualizada correctamente",
             status: "success",
@@ -277,7 +275,7 @@ const updateProductQuantityFromCart = async (req, res) => {
 const cleanCart = async (req, res) => {
   const cid = req.params.cid;
   try {
-    const cart = await cm.getCartByUsername(cid);
+    const cart = await cartsService.getCartByUsername(cid);
     if (!cart) {
       return res.status(400).json({
         msg: `El carrito no existe`,
@@ -287,7 +285,7 @@ const cleanCart = async (req, res) => {
       cart.products = [];
       cart.totalQuantity = 0;
       cart.totalPrice = 0;
-      const cartToUpdate = await cm.updateCartProducts(cart);
+      const cartToUpdate = await cartsService.updateCartProducts(cart);
       res.json({
         msg: "Carrito vaciado correctamente",
         status: "success",
