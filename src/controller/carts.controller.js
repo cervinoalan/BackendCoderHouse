@@ -2,9 +2,8 @@ const {
   mapProductCart,
   calculateCartTotal,
 } = require("../routes/utils/carts.utils");
-const cartsService = require("../service/carts.service");
-const productsService = require("../service/products.service");
-
+const cartsService = require("../repository/carts.service");
+const productsService = require("../repository/products.service");
 
 const createCarts = async (req, res) => {
   try {

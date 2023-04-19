@@ -1,5 +1,3 @@
-const UsersModel = require("../dao/models/user.model");
-
 const login = async (req, res) => {
   req.session.user = {
     first_name: req.user.first_name,
@@ -25,8 +23,12 @@ const logout = async (req, res) => {
   });
 };
 
+const current = async (req, res) => {
+  res.send(req.user);
+}
 module.exports = {
   login,
   register,
   logout,
+  current
 };

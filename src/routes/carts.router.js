@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const cartController = require("../controller/carts.controller");
+const { userLogged } = require("./utils/userStatus");
 
 router.post("/", cartController.createCarts);
 
@@ -8,7 +9,7 @@ router.get("/", cartController.getCarts);
 
 router.get("/:cid", cartController.getCartByUsername);
 
-router.post("/:cid/product/:pid", cartController.addProductToCart);
+router.post("/:cid/product/:pid",userLogged, cartController.addProductToCart);
 
 router.delete("/:cid/product/:pid", cartController.deleteProductFromCart);
 

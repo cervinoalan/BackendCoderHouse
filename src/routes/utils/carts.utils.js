@@ -1,6 +1,5 @@
 const ProductManager = require("../../dao/mongoManager/ProductManager");
 
-const pm = new ProductManager();
 
 const calculateCartTotal = (products) => {
   const result = products.reduce(
@@ -21,7 +20,7 @@ const mapProductCart = async (products) => {
     );
 
     if (indexProduct === -1) {
-      const productDb = await pm.getProductById(idProduct);
+      const productDb = await ProductManager.getProductById(idProduct);
       if (productDb) {
         productCartList.push({
           product: idProduct,

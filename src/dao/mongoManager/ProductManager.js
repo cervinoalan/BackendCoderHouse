@@ -38,4 +38,4 @@ class ProductManager {
   };
 }
 
-module.exports = ProductManager;
+module.exports = new ProductManager();

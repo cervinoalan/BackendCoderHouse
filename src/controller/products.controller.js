@@ -1,4 +1,4 @@
-const ProductService = require("../service/products.service");
+const ProductService = require("../repository/products.service");
 const {
   emitDeleteProduct,
   emitAddProduct,
