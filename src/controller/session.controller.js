@@ -1,3 +1,5 @@
+const UserDto = require("../dao/DTOs/user.dto");
+
 const login = async (req, res) => {
   req.session.user = {
     first_name: req.user.first_name,
@@ -24,11 +26,14 @@ const logout = async (req, res) => {
 };
 
 const current = async (req, res) => {
-  res.send(req.user);
-}
+  const user = req.user
+  const userDtos =  new UserDto(user);
+  res.send(userDtos);
+};
+
 module.exports = {
   login,
   register,
   logout,
-  current
+  current,
 };

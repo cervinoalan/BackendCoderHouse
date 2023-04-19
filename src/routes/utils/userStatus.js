@@ -10,7 +10,7 @@ const userAdmin = async (req, res, next) => {
 
 const userLogged = async (req, res, next) => {
   console.log(req.session.user);
-  if (!req.session.user || req.session?.user?.rol !== "user") {
+  if (!req.session.user || req.session?.user?.rol !== "usuario") {
     return res.status(401).json({
       status: "error",
       msg: "Usuario no autorizado",
