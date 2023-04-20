@@ -1,6 +1,6 @@
 const CartsManager = require("../dao/mongoManager/CartsManager");
 const ProductManager = require("../dao/mongoManager/ProductManager");
-const cm = new CartsManager();
+
 
 const getRealTimeProducts = async (req, res) => {
   const products = await ProductManager.getProducts();
@@ -41,7 +41,7 @@ const renderGetProducts = async (req, res) => {
 
 const renderCart = async (req, res) => {
   const { cid } = req.params;
-  const cart = await cm.getCartByUsername(cid);
+  const cart = await CartsManager.getCartByUsername(cid);
   console.log(cart.products);
   const products = cart.products.map((cart) => ({
     title: cart.product.title,

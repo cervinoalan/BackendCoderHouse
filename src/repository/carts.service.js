@@ -1,16 +1,16 @@
+//MONGO
 const CartsManager = require("../dao/mongoManager/CartsManager");
 
-const cm = new CartsManager();
+//MEMOERY
+// const CartsManagerFS = require("../dao/fileSystemManagar/CartsManagerFS");
 
 class CartService {
+  createCart = (cart) => CartsManager.createCart(cart);
+  getCarts = () => CartsManager.getCarts();
+  getCartByUsername = (cid) => CartsManager.getCartByUsername(cid);
+  getCartById = (cid) => CartsManager.getCartByUsername(cid);
+  updateCartProducts = (cart) => CartsManager.updateCartProducts(cart);
+  updateCart = (cid, newCart) => CartsManager.updateCart(cid, newCart);
+}
 
-    createCart = (cart) => cm.createCart(cart);
-    getCarts = () => cm.getCarts();
-    getCartByUsername = (cid) => cm.getCartByUsername(cid);
-    addProductToCart = (cid) => cm.getCartByUsername(cid);
-    updateCartProducts = (cart) => cm.updateCartProducts(cart);
-    updateCart = (cid, newCart) => cm.updateCart(cid, newCart);
-  }
-  
-  module.exports = new CartService();
-  
+module.exports = new CartService();

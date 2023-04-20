@@ -16,7 +16,7 @@ class CartsManager {
     this.carts = [];
   }
 
-  addCart = async () => {
+  createCart = async () => {
     const carts = await readFile(this.path);
     const id = carts.length;
     carts.push({
@@ -27,7 +27,15 @@ class CartsManager {
     return id;
   };
 
-  getCart = async (id) => {
+  getCarts = async (id) => {
+    const carts = await readFile(this.path);
+    if (carts) {
+      return carts;
+    }
+    throw new Error(`No existen carritos creados`);
+  };
+
+  getCartById = async (id) => {
     const carts = await readFile(this.path);
     if (carts[id]) {
       return carts[id];
@@ -35,7 +43,7 @@ class CartsManager {
     throw new Error(`No existe un carrito con el id ${id}`);
   };
 
-  addProductToCart = async (cid, pid) => {
+  updateCartProducts = async (cid, pid) => {
     const carts = await readFile(this.path);
     if (carts[cid]) {
       const productsIndex = carts[cid].products.findIndex((p) => p.id == pid);
@@ -52,5 +60,5 @@ class CartsManager {
   };
 }
 
-const cartManager = new CartsManager(__dirname + "/../../assets/carts.json");
-module.exports = cartManager;
+const CartsManagerFS = new CartsManager(__dirname + "/../../assets/carts.json");
+module.exports = CartsManagerFS;

@@ -129,5 +129,5 @@ class ProductManager {
   };
 }
 
-const ProductM = new ProductManager(__dirname + "/../../assets/products.json");
-module.exports = ProductM;
+const ProductManagerFS = new ProductManager(__dirname + "/../../assets/products.json");
+module.exports = ProductManagerFS;

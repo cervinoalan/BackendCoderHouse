@@ -6,7 +6,6 @@ const { hashPassword, comparePassword } = require("./bcrypt");
 const CartsManager = require("../../dao/mongoManager/CartsManager");
 const { REGISTER_STRATEGY, LOGIN_STRATEGY } = require("../../config/config");
 
-const cm = new CartsManager();
 
 const InitPassport = () => {
   passport.use(
@@ -25,7 +24,7 @@ const InitPassport = () => {
             done(null, false);
           } else {
             const hash = await hashPassword(password);
-            const cart = await cm.createCart();
+            const cart = await CartsManager.createCart();
             const cartId = mongoose.Types.ObjectId(cart);
             const user = await UsersModel.create({
               first_name,

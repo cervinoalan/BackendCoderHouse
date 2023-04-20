@@ -37,4 +37,4 @@ class CartsManager {
   };
 }
 
-module.exports = CartsManager;
+module.exports = new CartsManager();
