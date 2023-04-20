@@ -95,7 +95,7 @@ const addProductToCart = async (req, res) => {
           (product) => product.product._id.toString() === pid
         );
         if (!findProduct) {
-          cart.products.push({ product: pid, quantity: 1 });
+          cart.products.push({ product: pid,unitValue: product[0].price, quantity: 1 });
           cart.totalQuantity = cart.totalQuantity + 1;
           cart.totalPrice = cart.totalPrice + product[0].price;
           const cartToUpdate = await cartsService.updateCartProducts(cart);
