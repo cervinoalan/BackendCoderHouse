@@ -8,7 +8,9 @@ const login = async (req, res) => {
     email: req.user.email,
     rol: req.user.rol,
   };
-  res.send(req.user);
+  const userDtos =  new UserDto(req.user);
+  console.log(userDtos)
+  res.send(userDtos);
 };
 
 const register = async (req, res) => {
@@ -26,8 +28,7 @@ const logout = async (req, res) => {
 };
 
 const current = async (req, res) => {
-  const user = req.user
-  const userDtos =  new UserDto(user);
+  const userDtos =  new UserDto(req.user);
   res.send(userDtos);
 };
 
