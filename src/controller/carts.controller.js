@@ -316,28 +316,35 @@ const purchaseCart = async (req, res) => {
       const productBd = await productsService.getProductById(
         cart.products[i].product
       );
-      if (productBd.stock < cart.products[i].quantity) {
-        cartsReject.push(productBd);
-        cart.products[i].quantity -= 1;
-        console.log(cart.products[i].quantity);
-      } else {
+      if (productBd.stock >= cart.products[i].quantity) {
         productBd.stock = productBd.stock - cart.products[i].quantity;
         await productsService.updateProduct(productBd.id, productBd);
         total += productBd.price * cart.products[i].quantity;
         cartsTicket.push(cart.products);
+      } else {
+        cartsReject.push(productBd);
       }
     }
-    const newTicket = await cartsService.purchaseCart({
-      code: v4(),
-      amount: total,
-      products: cartsTicket,
-    });
-    res.json({
-      msg: "Ticket creado correctamente",
-      status: "success",
-      payload: newTicket,
-      productsRejected: cartsReject,
-    });
+    if (cartsTicket.length != 0) {
+      const newTicket = await cartsService.purchaseCart({
+        code: v4(),
+        amount: total,
+        purchaser: cid,
+        products: cartsTicket,
+      });
+      res.json({
+        msg: "Ticket creado correctamente",
+        status: "success",
+        payload: newTicket,
+        productsRejected: cartsReject,
+      });
+    } else{
+      res.status(412).json({
+        msg: "Error al finalizar la compra, no hay productos disponibles en stock.",
+        status: "error",
+        productsRejected: cartsReject,
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(404).json({
