@@ -20,7 +20,7 @@ class ProductManager {
   };
 
   getProductById = async (id) => {
-    const product = await productModel.find({ _id: id });
+    const product = await productModel.findById( id );
     return product;
   };
 

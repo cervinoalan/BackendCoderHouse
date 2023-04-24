@@ -4,6 +4,7 @@ const {
 } = require("../routes/utils/carts.utils");
 const cartsService = require("../repository/carts.service");
 const productsService = require("../repository/products.service");
+const { v4 } = require("uuid");
 
 const createCarts = async (req, res) => {
   try {
@@ -95,7 +96,11 @@ const addProductToCart = async (req, res) => {
           (product) => product.product._id.toString() === pid
         );
         if (!findProduct) {
-          cart.products.push({ product: pid,unitValue: product[0].price, quantity: 1 });
+          cart.products.push({
+            product: pid,
+            unitValue: product[0].price,
+            quantity: 1,
+          });
           cart.totalQuantity = cart.totalQuantity + 1;
           cart.totalPrice = cart.totalPrice + product[0].price;
           const cartToUpdate = await cartsService.updateCartProducts(cart);
@@ -300,6 +305,48 @@ const cleanCart = async (req, res) => {
   }
 };
 
+const purchaseCart = async (req, res) => {
+  let total = 0;
+  const cid = req.params.cid;
+  const cartsTicket = [];
+  const cartsReject = [];
+  try {
+    const cart = await cartsService.getCartByUsername(cid);
+    for (let i = 0; i < cart.products.length; i++) {
+      const productBd = await productsService.getProductById(
+        cart.products[i].product
+      );
+      if (productBd.stock < cart.products[i].quantity) {
+        cartsReject.push(productBd);
+        cart.products[i].quantity -= 1;
+        console.log(cart.products[i].quantity);
+      } else {
+        productBd.stock = productBd.stock - cart.products[i].quantity;
+        await productsService.updateProduct(productBd.id, productBd);
+        total += productBd.price * cart.products[i].quantity;
+        cartsTicket.push(cart.products);
+      }
+    }
+    const newTicket = await cartsService.purchaseCart({
+      code: v4(),
+      amount: total,
+      products: cartsTicket,
+    });
+    res.json({
+      msg: "Ticket creado correctamente",
+      status: "success",
+      payload: newTicket,
+      productsRejected: cartsReject,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      msg: "Error al finalizar la compra",
+      status: "error",
+    });
+  }
+};
+
 module.exports = {
   createCarts,
   getCarts,
@@ -309,4 +356,5 @@ module.exports = {
   updateProductFromCart,
   updateProductQuantityFromCart,
   cleanCart,
+  purchaseCart,
 };

@@ -11,6 +11,7 @@ class CartService {
   getCartById = (cid) => CartsManager.getCartByUsername(cid);
   updateCartProducts = (cart) => CartsManager.updateCartProducts(cart);
   updateCart = (cid, newCart) => CartsManager.updateCart(cid, newCart);
+  purchaseCart = (ticket) => CartsManager.purchaseCart(ticket);
 }
 
 module.exports = new CartService();

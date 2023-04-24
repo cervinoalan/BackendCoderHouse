@@ -1,4 +1,5 @@
 const cartsModel = require("../models/carts.model");
+const ticketModel = require("../models/ticket.model");
 
 class CartsManager {
   constructor() {
@@ -32,8 +33,15 @@ class CartsManager {
   };
 
   updateCartProducts = async (cart) => {
-    const cartUpdated = await cartsModel.findByIdAndUpdate(cart.id, cart, { new: true });
+    const cartUpdated = await cartsModel.findByIdAndUpdate(cart.id, cart, {
+      new: true,
+    });
     return cartUpdated;
+  };
+
+  purchaseCart = async (ticket) => {
+    const newTicket = await ticketModel.create(ticket);
+    return newTicket;
   };
 }
 

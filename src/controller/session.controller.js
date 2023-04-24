@@ -9,7 +9,6 @@ const login = async (req, res) => {
     rol: req.user.rol,
   };
   const userDtos =  new UserDto(req.user);
-  console.log(userDtos)
   res.send(userDtos);
 };
 
