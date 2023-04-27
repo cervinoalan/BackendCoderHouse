@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const chatsController = require("../controller/chat.controller");
-const { userLogged } = require("./utils/userStatus");
+const { userLogged } = require("../utils/userStatus");
 
 const router = Router();
 

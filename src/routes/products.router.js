@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const productController = require("../controller/products.controller");
 const multerUtils = require("../multer.utils");
-const { userAdmin } = require("./utils/userStatus");
+const { userAdmin } = require("../utils/userStatus");
 
 router.get("/", productController.getProducts);
 

@@ -2,7 +2,7 @@ const ProductService = require("../repository/products.service");
 const {
   emitDeleteProduct,
   emitAddProduct,
-} = require("../routes/utils/socket.io");
+} = require("../utils/socket.io");
 
 const getProducts = async (req, res) => {
   const { limit, page, sort, ...query } = req.query;

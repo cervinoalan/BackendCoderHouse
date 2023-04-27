@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const passport = require("passport");
 const local = require("passport-local");
-const UsersModel = require("../../dao/models/user.model");
-const { hashPassword, comparePassword } = require("./bcrypt");
-const CartsManager = require("../../dao/mongoManager/CartsManager");
-const { REGISTER_STRATEGY, LOGIN_STRATEGY } = require("../../config/config");
+const UsersModel = require("../dao/models/user.model");
+const { hashPassword, comparePassword } = require("../utils/bcrypt");
+const CartsManager = require("../dao/mongoManager/CartsManager");
+const { REGISTER_STRATEGY, LOGIN_STRATEGY } = require("../config/config");
 
 
 const InitPassport = () => {

@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const cartController = require("../controller/carts.controller");
-const { userLogged } = require("./utils/userStatus");
+const { userLogged } = require("../utils/userStatus");
 
 router.post("/", cartController.createCarts);
 router.get("/", cartController.getCarts);

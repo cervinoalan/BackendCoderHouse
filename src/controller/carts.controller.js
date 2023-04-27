@@ -1,7 +1,7 @@
 const {
   mapProductCart,
   calculateCartTotal,
-} = require("../routes/utils/carts.utils");
+} = require("../utils/carts.utils");
 const cartsService = require("../repository/carts.service");
 const productsService = require("../repository/products.service");
 const { v4 } = require("uuid");

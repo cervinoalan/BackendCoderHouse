@@ -1,6 +1,6 @@
 const ChatManager = require("../dao/mongoManager/ChatManager");
 const cm = new ChatManager();
-const { emitAddMessage } = require("../routes/utils/socket.io");
+const { emitAddMessage } = require("../utils/socket.io");
 
 const getMessage = async (req, res) => {
   try {

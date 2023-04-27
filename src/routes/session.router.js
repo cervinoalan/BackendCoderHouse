@@ -3,7 +3,7 @@ const passport = require("passport");
 const router = Router();
 const sessionController = require("../controller/session.controller");
 const { LOGIN_STRATEGY, REGISTER_STRATEGY } = require("../config/config");
-const { userAdmin } = require("./utils/userStatus");
+const { userAdmin } = require("../utils/userStatus");
 
 router.post(
   "/login",

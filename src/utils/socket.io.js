@@ -1,6 +1,6 @@
 const socket = require("socket.io");
-const ProductManager = require("../../dao/mongoManager/ProductManager");
-const ChatManager = require('../../dao/mongoManager/ChatManager')
+const ProductManager = require("../dao/mongoManager/ProductManager");
+const ChatManager = require('../dao/mongoManager/ChatManager')
 
 const chatManager = new ChatManager()
 

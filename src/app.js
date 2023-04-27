@@ -4,15 +4,15 @@ const cartsRouter = require("./routes/carts.router");
 const productRouter = require("./routes/products.router");
 const handlebars = require("express-handlebars");
 const viewsRouter = require("./routes/views.router");
-const { connectSocket } = require("./routes/utils/socket.io");
+const { connectSocket } = require("./utils/socket.io");
 const mongoose = require("mongoose");
 const chatsRouter = require("./routes/chats.router");
 const session = require("express-session");
 const MongoConnect = require("connect-mongo");
 const sessionRouter = require("./routes/session.router");
-const InitPassport = require("./routes/utils/passport.config");
+const InitPassport = require("./utils/passport.config");
 const passport = require("passport");
-const mockingRouter = require("./routes/mocking.router")
+const mockingRouter = require("./routes/mocking.router");
 
 //init
 const app = express();
@@ -52,7 +52,7 @@ app.use("/api/chats", chatsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/session", sessionRouter);
-app.use('/api/mockingproducts', mockingRouter);
+app.use("/api/mockingproducts", mockingRouter);
 
 //socket.io
 const httpServer = app.listen(PORT, () => {
