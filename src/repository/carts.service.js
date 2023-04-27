@@ -12,6 +12,8 @@ class CartService {
   updateCartProducts = (cart) => CartsManager.updateCartProducts(cart);
   updateCart = (cid, newCart) => CartsManager.updateCart(cid, newCart);
   purchaseCart = (ticket) => CartsManager.purchaseCart(ticket);
+  deleteProductFromCart = (cid, pid) =>
+    CartsManager.deleteProductFromCart(cid, pid);
 }
 
 module.exports = new CartService();

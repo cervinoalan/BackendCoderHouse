@@ -12,6 +12,7 @@ const MongoConnect = require("connect-mongo");
 const sessionRouter = require("./routes/session.router");
 const InitPassport = require("./routes/utils/passport.config");
 const passport = require("passport");
+const mockingRouter = require("./routes/mocking.router")
 
 //init
 const app = express();
@@ -51,6 +52,7 @@ app.use("/api/chats", chatsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/session", sessionRouter);
+app.use('/api/mockingproducts', mockingRouter);
 
 //socket.io
 const httpServer = app.listen(PORT, () => {

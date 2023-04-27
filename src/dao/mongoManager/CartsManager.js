@@ -43,6 +43,12 @@ class CartsManager {
     const newTicket = await ticketModel.create(ticket);
     return newTicket;
   };
-}
 
+  deleteProductFromCart = async (cid, pid) => {
+    const deleteProduct = await cartsModel.findOneAndUpdate({username : cid}, {
+      $pull: { products: { pid } },
+    });
+    return deleteProduct;
+  };
+}
 module.exports = new CartsManager();

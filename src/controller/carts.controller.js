@@ -77,7 +77,6 @@ const addProductToCart = async (req, res) => {
       });
     } else {
       const cart = await cartsService.getCartByUsername(cid);
-
       if (!cart) {
         const newCart = {
           totalPrice: product[0].price,
@@ -98,11 +97,11 @@ const addProductToCart = async (req, res) => {
         if (!findProduct) {
           cart.products.push({
             product: pid,
-            unitValue: product[0].price,
+            unitValue: product.price,
             quantity: 1,
           });
           cart.totalQuantity = cart.totalQuantity + 1;
-          cart.totalPrice = cart.totalPrice + product[0].price;
+          cart.totalPrice = cart.totalPrice + product.price;
           const cartToUpdate = await cartsService.updateCartProducts(cart);
           res.json({
             msg: "Producto agregado exitosamente",
@@ -338,7 +337,7 @@ const purchaseCart = async (req, res) => {
         payload: newTicket,
         productsRejected: cartsReject,
       });
-    } else{
+    } else {
       res.status(412).json({
         msg: "Error al finalizar la compra, no hay productos disponibles en stock.",
         status: "error",
