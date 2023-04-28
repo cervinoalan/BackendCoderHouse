@@ -13,6 +13,7 @@ const sessionRouter = require("./routes/session.router");
 const InitPassport = require("./utils/passport.config");
 const passport = require("passport");
 const mockingRouter = require("./routes/mocking.router");
+const mdwError = require("./utils/errors/errorMdw");
 
 //init
 const app = express();
@@ -36,6 +37,8 @@ app.use(
   })
 );
 
+
+
 //passport
 InitPassport();
 app.use(passport.initialize());
@@ -53,6 +56,10 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/session", sessionRouter);
 app.use("/api/mockingproducts", mockingRouter);
+
+
+//mdw control de errores
+app.use(mdwError)
 
 //socket.io
 const httpServer = app.listen(PORT, () => {
