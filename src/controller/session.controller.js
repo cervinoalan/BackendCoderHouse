@@ -3,8 +3,6 @@ const CustomError = require("../utils/errors/customError");
 const { UNEXPECTED_VALUE } = require("../utils/errors/enumsError");
 
 const login = async (req, res, next) => {
-  const error = CustomError.createError({code:500,msg:"Dato incorrecto",typeError:UNEXPECTED_VALUE})
-  return next(error);
   req.session.user = {
     first_name: req.user.first_name,
     last_name: req.user.last_name,

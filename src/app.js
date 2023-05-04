@@ -14,6 +14,8 @@ const InitPassport = require("./utils/passport.config");
 const passport = require("passport");
 const mockingRouter = require("./routes/mocking.router");
 const mdwError = require("./utils/errors/errorMdw");
+const mdwLogger = require("./config/logger");
+const loggerRouter = require("./routes/loggerTest.router");
 
 //init
 const app = express();
@@ -49,6 +51,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
+//mdw Logger
+app.use(mdwLogger)
+
 //rutas
 app.use("/api/products", productRouter);
 app.use("/api/chats", chatsRouter);
@@ -56,6 +61,7 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/session", sessionRouter);
 app.use("/api/mockingproducts", mockingRouter);
+app.use("/loggerTest", loggerRouter)
 
 
 //mdw control de errores
