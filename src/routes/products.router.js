@@ -8,9 +8,9 @@ router.get("/", productController.getProducts);
 
 router.get("/:pid", productController.getProductById);
 
-router.post("/", multerUtils.single("thumbnail"),userAdmin, productController.addProduct);
+router.post("/", multerUtils.single("thumbnail"), productController.addProduct);
 
-router.put("/:pid",userAdmin, productController.updateProduct);
+router.put("/:pid",productController.updateProduct);
 
 router.delete("/:pid",userAdmin, productController.deleteProduct);
 

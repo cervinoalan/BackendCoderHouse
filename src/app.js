@@ -16,9 +16,27 @@ const mockingRouter = require("./routes/mocking.router");
 const mdwError = require("./utils/errors/errorMdw");
 const mdwLogger = require("./config/logger");
 const loggerRouter = require("./routes/loggerTest.router");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
 
 //init
 const app = express();
+app.use(cors());
+
+const configSwagger = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API",
+      description: "API Eccomerce",
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yml`],
+};
+
+const spec = swaggerJsDoc(configSwagger);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec));
 
 //handlebars
 app.engine("handlebars", handlebars.engine());
@@ -39,8 +57,6 @@ app.use(
   })
 );
 
-
-
 //passport
 InitPassport();
 app.use(passport.initialize());
@@ -52,7 +68,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 //mdw Logger
-app.use(mdwLogger)
+app.use(mdwLogger);
 
 //rutas
 app.use("/api/products", productRouter);
@@ -61,11 +77,10 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 app.use("/api/session", sessionRouter);
 app.use("/api/mockingproducts", mockingRouter);
-app.use("/loggerTest", loggerRouter)
-
+app.use("/loggerTest", loggerRouter);
 
 //mdw control de errores
-app.use(mdwError)
+app.use(mdwError);
 
 //socket.io
 const httpServer = app.listen(PORT, () => {

@@ -1,0 +1,115 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - "Products"
+      responses:
+        "200":
+          description: Se obtuvieron los productos correctamente
+        "400":
+          description: Ocurrio un error, no se encontraron los productos
+    post:
+      summary: Agregar un producto
+      tags:
+        - "Products"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/addProduct"
+      responses:
+        "200":
+          description: Se agrego el producto correctamente
+        "400":
+          description: Ocurrio un error, no fue posible agregar el productos  
+  /api/products/{pid}:
+    get:
+      summary: Obtener el producto con id
+      tags:
+        - "Products"
+      parameters:
+        - name: pid
+          in: path
+          description: Identificador del producto
+          required: true
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se obtuvo correctamente el producto
+        "404":
+          description: Ocurrio un error, no se encontro el producto 
+    put:
+      summary: Actualizar producto seleccionado
+      tags:
+        - "Products"
+      parameters:
+        - name: pid
+          in: path
+          description: Identificador del producto
+          required: true
+          schema:
+            $type: String
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: Se obtuvieron los productos correctamente
+    delete:
+      summary: Eliminar el producto seleccionado
+      tags:
+        - "Products"
+      parameters:
+        - name: pid
+          in: path
+          description: Identificador del producto
+          required: true
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se elimino el producto correctamente
+
+components:
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        price:
+          type: Number
+          description: Precio del producto
+        description:
+          type: String
+          description: Descripcion del producto
+      example:
+        price: "20000"
+        description: ""
+    addProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        price:
+          type: Number
+          description: Precio del producto
+        description:
+          type: String
+          description: Descripcion del producto
+        code:
+          type: String
+          description: SKU del producto
+        category:
+          type: String
+          description: Categoria del producto
+      example:
+        title: "Mouse"
+        price: "10000"
+        description: "Mouse inalambrico"
+        code: "777"
+        category: "Mouses"
+        

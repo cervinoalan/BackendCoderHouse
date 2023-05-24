@@ -31,7 +31,7 @@ const getProductById = async (req, res) => {
       payload: product,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       msg: `No existe un producto con el id: ${productId}`,
       status: "error",
     });
