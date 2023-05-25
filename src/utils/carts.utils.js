@@ -25,7 +25,7 @@ const mapProductCart = async (products) => {
         productCartList.push({
           product: idProduct,
           quantity: 1,
-          unitValue: productDb[0].price,
+          unitValue: productDb.price,
         });
         cartTotalQuantity++;
       } else {

@@ -23,7 +23,7 @@ class CartsManager {
     return cart;
   };
 
-  getCartsById = async (id) => {
+  getCartById = async (id) => {
     const cart = await cartsModel.findById(id);
     return cart;
   };

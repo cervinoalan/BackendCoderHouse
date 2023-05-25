@@ -74,6 +74,7 @@ paths:
         "200":
           description: Se elimino el producto correctamente
 
+
 components:
   requestBodies:
     updateProduct:

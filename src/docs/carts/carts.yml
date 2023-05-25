@@ -1,0 +1,198 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtener todos los carritos
+      tags:
+        - "Carts"
+      responses:
+        "200":
+          description: Se obtuvieron los carritos correctamente
+        "400":
+          description: Ocurrio un error, no se encontraron los carritos
+    post:
+      summary: Agregar un carrito
+      tags:
+        - "Carts"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/addCart"
+      responses:
+        "200":
+          description: Se agrego el carrito correctamente
+        "400":
+          description: Ocurrio un error, no fue posible agregar el carrito
+  /api/carts/{cid}:
+    get:
+      summary: Obtener el carrito con id
+      tags:
+        - "Carts"
+      parameters:
+        - name: cid
+          in: path
+          description: Identificador del carrito
+          required: true
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se obtuvo correctamente el carrito
+        "404":
+          description: Ocurrio un error, no se encontro el carrito
+    delete:
+      summary: Vaciar el carrito seleccionado
+      tags:
+        - "Carts"
+      parameters:
+        - name: cid
+          in: path
+          description: Identificador del carrito
+          required: true
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se vacio el carrito correctamente
+    put:
+      summary: Actualizar carrito seleccionado
+      tags:
+        - "Carts"
+      parameters:
+        - name: cid
+          in: path
+          description: Identificador del carrito
+          required: true
+          schema:
+            $type: String
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateCart"
+      responses:
+        "200":
+          description: Se actualizaron los productos del carrito correctamente
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agregar un producto al carrito
+      tags:
+        - "Carts"
+      parameters:
+        - name: cid
+          in: path
+          description: Identificador del carrito
+          required: true
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          description: Identificador del producto
+          required: true
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se agrego el producto al carrito correctamente
+        "400":
+          description: Ocurrio un error, no fue posible agregar el producto al carrito
+    delete:
+      summary: Eliminar un producto del carrito
+      tags:
+        - "Carts"
+      parameters:
+        - name: cid
+          in: path
+          description: Identificador del carrito
+          required: true
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          description: Identificador del producto
+          required: true
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se elimino el producto del carrito correctamente
+        "400":
+          description: Ocurrio un error, no fue posible eliminar el producto del carrito   
+    put:
+      summary: Actualizar cantidad de producto del carrito
+      tags:
+        - "Carts"
+      parameters:
+        - name: cid
+          in: path
+          description: Identificador del carrito
+          required: true
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          description: Identificador del producto
+          required: true
+          schema:
+            $type: String
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateQuantity"
+      responses:
+        "200":
+          description: Se actualizo la cantidad del producto correctamente
+        "400":
+          description: Ocurrio un error, no fue posible actualizar la cantidad del producto en el carrito 
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Finalizar compra de carrito
+      tags:
+        - "Carts"
+      parameters:
+        - name: cid
+          in: path
+          description: Identificador del carrito
+          required: true
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Se creo el ticket de compra exitosamente
+        "400":
+          description: Ocurrio un error, no fue posible crear el ticket de compra.
+
+
+components:
+  requestBodies:
+    addCart:
+      type: object
+      properties:
+        username:
+          type: String
+          description: Dueño del carrito
+        products:
+          type: Array
+          description: Productos
+      example:
+        username: "Alan"
+        products: []
+    updateCart:
+      type: object
+      properties:
+        products:
+          type: Array
+          description: Productos
+      example:
+        products: []
+    updateQuantity:
+      type: object
+      properties:
+        quantity:
+          type: Number
+          description: Cantidad del producto
+      example:
+        quantity: 2
+
+        
