@@ -1,4 +1,6 @@
+const { MAILING } = require("../config/config");
 const UserDto = require("../dao/DTOs/user.dto");
+const mailingService = require("../repository/mailing.service");
 const CustomError = require("../utils/errors/customError");
 const { UNEXPECTED_VALUE } = require("../utils/errors/enumsError");
 
@@ -10,7 +12,7 @@ const login = async (req, res, next) => {
     email: req.user.email,
     rol: req.user.rol,
   };
-  const userDtos =  new UserDto(req.user);
+  const userDtos = new UserDto(req.user);
   res.send(userDtos);
 };
 
@@ -29,8 +31,24 @@ const logout = async (req, res) => {
 };
 
 const current = async (req, res) => {
-  const userDtos =  new UserDto(req.user);
+  const userDtos = new UserDto(req.user);
   res.send(userDtos);
+};
+
+
+const forgotPassword = async (req, res) => {
+  console.log("hola")
+  try {
+    const result = await mailingService.sendMail({
+      to: "cervino1999@gmail.com",
+      subject: "Hola este es un mail de prueba",
+      html: `<h1> Hola mail prueba</h1>`,
+    });
+    console.log(result);
+    res.json({ msg: "Ok" });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = {
@@ -38,4 +56,5 @@ module.exports = {
   register,
   logout,
   current,
+  forgotPassword,
 };

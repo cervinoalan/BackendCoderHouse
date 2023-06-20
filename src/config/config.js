@@ -9,4 +9,8 @@ module.exports = {
   LOGIN_STRATEGY: process.env.LOGIN_STRATEGY,
   REGISTER_STRATEGY: process.env.REGISTER_STRATEGY,
   URL_SERVICE: process.env.URL_SERVICE,
+  MAILING: {
+    USER: process.env.CORREO,
+    PASSWORD: process.env.CORREO_PASSWORD,
+  },
 };
