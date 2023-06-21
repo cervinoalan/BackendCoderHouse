@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const usersCollection = "usersLogin";
 
+const roles = ['admin', 'user', 'premium'];
+
 const UserSchema = new mongoose.Schema({
   first_name: {
     type: String,
@@ -33,7 +35,22 @@ const UserSchema = new mongoose.Schema({
   ],
   rol: {
     type: String,
-    default: "usuario",
+    enum: roles,
+    required: true,
+    default: "user",
+  },
+  documents: {
+    type: [
+      {
+        name: String,
+        reference: String,
+      },
+    ],
+    default: [],
+  },
+  last_connection: {
+    type: String,
+    default: Date.now,
   },
 });
 

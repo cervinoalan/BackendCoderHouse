@@ -19,6 +19,7 @@ const loggerRouter = require("./routes/loggerTest.router");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
+const usersRouter = require("./routes/users.router");
 
 //init
 const app = express();
@@ -78,6 +79,7 @@ app.use("/", viewsRouter);
 app.use("/api/session", sessionRouter);
 app.use("/api/mockingproducts", mockingRouter);
 app.use("/loggerTest", loggerRouter);
+app.use("/api/users", usersRouter);
 
 //mdw control de errores
 app.use(mdwError);
