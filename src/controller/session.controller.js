@@ -1,8 +1,8 @@
-const { MAILING } = require("../config/config");
 const UserDto = require("../dao/DTOs/user.dto");
-const mailingService = require("../repository/mailing.service");
+const transport = require("../utils/mailing");
 const CustomError = require("../utils/errors/customError");
 const { UNEXPECTED_VALUE } = require("../utils/errors/enumsError");
+const usersService = require("../repository/users.service");
 
 const login = async (req, res, next) => {
   req.session.user = {
@@ -35,19 +35,26 @@ const current = async (req, res) => {
   res.send(userDtos);
 };
 
-
 const forgotPassword = async (req, res) => {
-  console.log("hola")
   try {
-    const result = await mailingService.sendMail({
-      to: "cervino1999@gmail.com",
-      subject: "Hola este es un mail de prueba",
-      html: `<h1> Hola mail prueba</h1>`,
+    let { email } = req.body;
+    const user = await usersService.getUserByEmail({ email: email });
+    console.log(user);
+    if (user === null) {
+      return res.status(404).json({ message: 'El mail ingresado es invalido' });
+    }
+    // let token = generateToken({ id: user.id });
+    // transport.sendMail({
+    //   to: user.email,
+    //   subject: `Hola ${user.first_name}`,
+    //   html: `<a href="http://localhost:8080/api/session/redirectForgotPassword/${token}">aqui</a>`,
+    // });
+    res.json({
+      status: "success",
+      user,
     });
-    console.log(result);
-    res.json({ msg: "Ok" });
   } catch (error) {
-    console.log(error);
+    return res.send({ status: "error", message: "El email es inválido" });
   }
 };
 

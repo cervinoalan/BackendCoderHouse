@@ -3,6 +3,8 @@ const UserSchema = require("../models/users.model");
 class UserManager {
   get = () => UserSchema.find();
 
+  getByEmail = (email) => UserSchema.findOne(email);
+
   insert = (user) => UserSchema.create(user);
 
   update = (user, id) => UserSchema.findByIdAndUpdate(id, user);
