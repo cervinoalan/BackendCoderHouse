@@ -17,4 +17,8 @@ router.get("/register", viewController.renderRegister);
 
 router.get("/perfil", viewController.renderPerfil);
 
+router.get("/forgotpassword", viewController.renderForgotPass);
+
+router.get("/forgotrecovery", viewController.renderForgotRecovery);
+
 module.exports = router;

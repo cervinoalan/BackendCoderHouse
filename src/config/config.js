@@ -13,4 +13,5 @@ module.exports = {
     USER: process.env.CORREO,
     PASSWORD: process.env.CORREO_PASSWORD,
   },
+  PRIVATE_KEY_JWT: process.env.PRIVATE_KEY_JWT,
 };

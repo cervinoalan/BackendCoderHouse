@@ -21,6 +21,9 @@ router.post("/logout", sessionController.logout);
 
 router.get("/current", userAdmin, sessionController.current);
 
-router.get('/forgotpassword',sessionController.forgotPassword);
+router.post('/forgotPassword',sessionController.forgotPassword);
+
+router.post('/forgotrecovery/:token', sessionController.forgotRecovery);
+
 
 module.exports = router;

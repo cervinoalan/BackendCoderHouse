@@ -3,6 +3,8 @@ const UserSchema = require("../models/users.model");
 class UserManager {
   get = () => UserSchema.find();
 
+  getById = (id) => UserSchema.findById(id);
+
   getByEmail = (email) => UserSchema.findOne(email);
 
   insert = (user) => UserSchema.create(user);
@@ -23,6 +25,9 @@ class UserManager {
     let result = await UserSchema.deleteOne({ email: email });
     return result;
   };
+
+  updatePassword = (id, newPassword) =>
+    UserSchema.findByIdAndUpdate(id, { password: newPassword });
 }
 
 module.exports = new UserManager();

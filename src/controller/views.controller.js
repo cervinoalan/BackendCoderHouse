@@ -101,6 +101,14 @@ const renderPerfil = async (req, res) => {
   }
 };
 
+const renderForgotPass = async (req, res) => {
+  res.render("forgotpassword");
+};
+
+const renderForgotRecovery = async (req, res) => {
+  res.render("forgotrecovery");
+};
+
 module.exports = {
   getRealTimeProducts,
   renderChats,
@@ -109,4 +117,6 @@ module.exports = {
   renderLogin,
   renderRegister,
   renderPerfil,
+  renderForgotPass,
+  renderForgotRecovery
 };

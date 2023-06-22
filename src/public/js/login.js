@@ -28,3 +28,10 @@ signUpButton.addEventListener('click', (e) => {
   e.preventDefault();
   window.location.href = '/register';
 });
+
+const resetPassButton = document.getElementById('resetPassButton');
+
+resetPassButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.location.href = '/forgotpassword';
+});
