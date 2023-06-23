@@ -23,8 +23,8 @@ class CartsManager {
     return cart;
   };
 
-  getCartById = async (id) => {
-    const cart = await cartsModel.findById(id);
+  getCartById = async (cid) => {
+    const cart = await cartsModel.findById(cid);
     return cart;
   };
 

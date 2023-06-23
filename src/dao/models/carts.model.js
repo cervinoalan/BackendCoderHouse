@@ -27,10 +27,6 @@ const cartsSchema = new mongoose.Schema({
     ],
     default: [],
   },
-  username: {
-    type: String,
-    require: true,
-  },
 });
 
 const cartsModel = mongoose.model("carts", cartsSchema);

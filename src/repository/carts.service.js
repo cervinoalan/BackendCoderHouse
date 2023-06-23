@@ -7,7 +7,6 @@ const CartsManager = require("../dao/mongoManager/CartsManager");
 class CartService {
   createCart = (cart) => CartsManager.createCart(cart);
   getCarts = () => CartsManager.getCarts();
-  getCartById = (cid) => CartsManager.getCartByUsername(cid);
   getCartById = (cid) => CartsManager.getCartById(cid);
   updateCartProducts = (cart) => CartsManager.updateCartProducts(cart);
   updateCart = (cid, newCart) => CartsManager.updateCart(cid, newCart);

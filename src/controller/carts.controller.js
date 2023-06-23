@@ -1,14 +1,11 @@
-const {
-  mapProductCart,
-  calculateCartTotal,
-} = require("../utils/carts.utils");
+const { mapProductCart, calculateCartTotal } = require("../utils/carts.utils");
 const cartsService = require("../repository/carts.service");
 const productsService = require("../repository/products.service");
 const { v4 } = require("uuid");
 
 const createCarts = async (req, res) => {
   try {
-    const { products = [], username } = req.body;
+    const { products = [] } = req.body;
 
     let { productCartList, productsNotFound, cartTotalQuantity } =
       await mapProductCart(products);
@@ -16,7 +13,6 @@ const createCarts = async (req, res) => {
       totalPrice: calculateCartTotal(productCartList),
       totalQuantity: cartTotalQuantity,
       products: productCartList,
-      username: username,
     };
     const createCart = await cartsService.createCart(cart);
     res.json({
@@ -75,52 +71,45 @@ const addProductToCart = async (req, res) => {
         msg: `El producto con el id ${pid} no existe`,
         status: "error",
       });
-    } else {
-      const cart = await cartsService.getCartById(cid);
-      if (!cart) {
-        const newCart = {
-          totalPrice: product[0].price,
-          totalQuantity: 1,
-          products: [{ product: pid, quantity: 1 }],
-          username: cid,
-        };
-        const cartToSave = await cartsService.createCart(newCart);
-        res.json({
-          msg: "Carrito creado y productos agregados exitosamente",
-          status: "success",
-          payload: cartToSave,
-        });
-      } else {
-        const findProduct = cart.products.find(
-          (product) => product.product._id.toString() === pid
-        );
-        if (!findProduct) {
-          cart.products.push({
-            product: pid,
-            unitValue: product.price,
-            quantity: 1,
-          });
-          cart.totalQuantity = cart.totalQuantity + 1;
-          cart.totalPrice = cart.totalPrice + product.price;
-          const cartToUpdate = await cartsService.updateCartProducts(cart);
-          res.json({
-            msg: "Producto agregado exitosamente",
-            status: "success",
-            payload: cartToUpdate,
-          });
-        } else {
-          findProduct.quantity++;
-          cart.totalQuantity = cart.totalQuantity + 1;
-          cart.totalPrice = cart.totalPrice + findProduct.product.price;
-          const cartToUpdate = await cartsService.updateCartProducts(cart);
-          res.json({
-            msg: "Produto agregado al carrito",
-            status: "success",
-            payload: cartToUpdate,
-          });
-        }
-      }
     }
+
+    let cart = await cartsService.getCartById(cid);
+    if (!cart) {
+      const newCart = {
+        totalPrice: product.price,
+        totalQuantity: 1,
+        products: [{ product: pid, quantity: 1 }],
+      };
+      cart = await cartsService.createCart(newCart);
+      return res.json({
+        msg: "Carrito creado y productos agregados exitosamente",
+        status: "success",
+        payload: cart,
+      });
+    }
+
+    const findProduct = cart.products.find(
+      (prod) => prod.product.toString() === pid
+    );
+    if (!findProduct) {
+      cart.products.push({
+        product: pid,
+        unitValue: product.price,
+        quantity: 1,
+      });
+    } else {
+      findProduct.quantity++;
+    }
+
+    cart.totalQuantity++;
+    cart.totalPrice += product.price;
+
+    const cartToUpdate = await cartsService.updateCartProducts(cart);
+    res.json({
+      msg: "Producto agregado exitosamente",
+      status: "success",
+      payload: cartToUpdate,
+    });
   } catch (error) {
     console.log(error);
     res.status(404).json({
@@ -129,6 +118,7 @@ const addProductToCart = async (req, res) => {
     });
   }
 };
+
 
 const deleteProductFromCart = async (req, res) => {
   const { cid, pid } = req.params;
@@ -218,7 +208,7 @@ const updateProductFromCart = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(404).json({
       msg: "Error al actualizar el  producto",
       status: "error",
