@@ -7,6 +7,8 @@ const { generateToken, getUserByToken } = require("../utils/jwt");
 const { hashPassword, comparePassword } = require("../utils/bcrypt");
 
 const login = async (req, res, next) => {
+  await usersService.lastConnection(req.user, new Date().toLocaleString());
+  req.logger.info(`${req.user.first_name} - last connection updated`)
   req.session.user = {
     first_name: req.user.first_name,
     last_name: req.user.last_name,
@@ -23,6 +25,8 @@ const register = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+  await usersService.lastConnection(req.user, new Date().toLocaleString());
+  req.logger.info(`${req.user.first_name} - last connection updated`)
   req.session.destroy((error) => {
     if (!error) {
       res.send("Sesion cerrada con exito!");

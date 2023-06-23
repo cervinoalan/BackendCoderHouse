@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema({
   },
   last_connection: {
     type: String,
-    default: Date.now,
+    default: new Date().toLocaleString(),
   },
 });
 

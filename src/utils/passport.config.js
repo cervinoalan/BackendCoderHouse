@@ -33,7 +33,7 @@ const InitPassport = () => {
               email: username,
               password: hash,
               cart: cartId,
-              rol: "usuario",
+              rol: "user",
             });
             done(null, user);
           }

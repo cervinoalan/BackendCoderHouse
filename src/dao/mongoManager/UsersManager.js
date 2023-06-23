@@ -26,6 +26,14 @@ class UserManager {
     return result;
   };
 
+  deleteMany = async (users) => {
+    users.forEach(async (user) => {
+      let result = await UserSchema.deleteOne({ email: user });
+      console.log(result);
+      return result;
+    });
+  };
+
   updatePassword = (id, newPassword) =>
     UserSchema.findByIdAndUpdate(id, { password: newPassword });
 }
