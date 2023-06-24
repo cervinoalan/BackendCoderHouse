@@ -11,6 +11,15 @@ class UserManager {
 
   update = (user, id) => UserSchema.findByIdAndUpdate(id, user);
 
+  updateRol = async (id, newRol) => {
+    const updatedUser = await UserSchema.findByIdAndUpdate(
+      id,
+      { rol: newRol },
+      { new: true }
+    );
+    return updatedUser;
+  };
+
   delete = (id) => UserSchema.findByIdAndDelete(id);
 
   lastConnection = async (user, lastconnection) => {
@@ -34,8 +43,14 @@ class UserManager {
     });
   };
 
-  updatePassword = (id, newPassword) =>
+  updatePassword = (id, newPassword) => {
     UserSchema.findByIdAndUpdate(id, { password: newPassword });
+  };
+
+  editOneById = async (id, params) => {
+    let result = UserSchema.findByIdAndUpdate(id, params);
+    return result;
+  };
 }
 
 module.exports = new UserManager();

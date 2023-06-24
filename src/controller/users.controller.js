@@ -3,6 +3,8 @@ const UserDto = require("../dao/DTOs/user.dto");
 const local = require("dayjs/locale/ar");
 const transport = require("../utils/mailing");
 const moment = require("moment");
+const { TYPE_DOCUMENTS } = require("../config/config");
+const productsService = require("../repository/products.service");
 
 const getUsers = async (req, res) => {
   try {
@@ -33,6 +35,41 @@ const updateUser = async (req, res) => {
     res.json({ msg: "ok", updatedUser });
   } catch (error) {
     res.status(500).json({ error: "Error al intentar actualizar usuario" });
+  }
+};
+
+const updateRol = async (req, res) => {
+  try {
+    const id = req.params.uid;
+    const newRol = "premium";
+    if (req.user.rol === "user") {
+      const documents = req.user.documents;
+      const uploadedDocuments = documents.filter((document) =>
+        TYPE_DOCUMENTS.includes(document.name)
+      );
+
+      if (uploadedDocuments.length < 3) {
+        return res.json({
+          msg: "Para ser usuario premium debe subir la documentacion necesaria",
+        });
+      }
+
+      const updatedUser = await usersService.updateRol(id, newRol);
+      console.log(updatedUser);
+
+      return res.status(200).json({
+        status: "success",
+        message: `Rol actualizado a ${newRol}`,
+        data: updatedUser,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: "error",
+      message: "Error al actualizar el rol del usuario",
+      error: error.message,
+    });
   }
 };
 
@@ -75,7 +112,9 @@ const deleteLastConnect = async (req, res, next) => {
           req.logger.error("El mail del usuario no es válido");
         }
         deleteUsers.push(user.email);
-        console.log(`${deleteUsers} son los usuarios con mas de 30min inactivos`);
+        console.log(
+          `${deleteUsers} son los usuarios con mas de 30min inactivos`
+        );
       }
     });
     console.log(`${deleteUsers} son todos los usuarios inactivos`);
@@ -101,10 +140,68 @@ const deleteLastConnect = async (req, res, next) => {
   }
 };
 
+const uploadDocs = async (req, res, next) => {
+  try {
+    let user = req.user;
+
+    let userDocuments = [];
+
+    user.documents.forEach((element) => {
+      userDocuments.push(element.name);
+    });
+
+    if (
+      userDocuments.findIndex((value) => value == req.body.typeDocument) !=
+        -1 &&
+      req.body.typeDocument != "product" &&
+      req.body.typeDocument != "thumbnail"
+    ) {
+      return res
+        .status(403)
+        .send({ status: "error", message: "Archivo ya subido" });
+    }
+    if (
+      userDocuments.findIndex((value) => value == req.body.typeDocument) !=
+        -1 &&
+      req.body.typeDocument != "document" &&
+      req.body.typeDocument != "thumbnail"
+    ) {
+      return res
+        .status(403)
+        .send({ status: "error", message: "Archivo ya subido" });
+    }
+
+    if (req.body.typeDocument === 'product') {
+      const pid = req.body.pid || req.params.pid;
+      if (!pid) {
+        return res.status(400).send({ status: 'error', message: 'Falta el parámetro pid' });
+      }
+      await productsService.updateProduct(pid,{thumbnail : `/documents/${req.route}/${req.filename}`});
+
+    }
+
+    await usersService.editOneById(req.user.id, {
+      documents: [
+        ...req.user.documents,
+        {
+          name: req.body.typeDocument,
+          reference: `/documents/${req.route}/${req.filename}`,
+        },
+      ],
+    });
+
+    res.send({ status: "Ok", message: "Archivos guardados correctamente" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getUsers,
   insertUser,
   updateUser,
+  updateRol,
   deleteUser,
   deleteLastConnect,
+  uploadDocs,
 };

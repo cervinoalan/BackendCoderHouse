@@ -2,6 +2,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+const TYPE_DOCUMENTS = ['Identificación', 'Comprobante de domicilio', 'Comprobante de estado de cuenta'];
+
 module.exports = {
   PORT: process.env.PORT,
   MONGO_URL: process.env.MONGO_URL,
@@ -14,4 +16,5 @@ module.exports = {
     PASSWORD: process.env.CORREO_PASSWORD,
   },
   PRIVATE_KEY_JWT: process.env.PRIVATE_KEY_JWT,
+  TYPE_DOCUMENTS,
 };

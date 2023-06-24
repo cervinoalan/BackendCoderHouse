@@ -8,7 +8,7 @@ router.get("/", productController.getProducts);
 
 router.get("/:pid", productController.getProductById);
 
-router.post("/", multerUtils.single("thumbnail"), productController.addProduct);
+router.post("/", productController.addProduct);
 
 router.put("/:pid",productController.updateProduct);
 
