@@ -13,7 +13,7 @@ class UserManager {
 
   updateRol = async (id, newRol) => {
     const updatedUser = await UserSchema.findByIdAndUpdate(
-      id,
+      {id},
       { rol: newRol },
       { new: true }
     );
