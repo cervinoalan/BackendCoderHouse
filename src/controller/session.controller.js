@@ -18,6 +18,9 @@ const login = async (req, res, next) => {
   };
   const userDtos = new UserDto(req.user);
   res.send(userDtos);
+  // let token = generateToken({ id: req.user.id });
+  // const userDtos = new UserDto(req.user);
+  // res.send({userDtos : userDtos, token});
 };
 
 const register = async (req, res) => {
@@ -53,11 +56,11 @@ const forgotPassword = async (req, res, next) => {
     transport.sendMail({
       to: user.email,
       subject: `Hola ${user.first_name}`,
-      html: `<a href="http://localhost:8080/forgotrecovery?token=${token}">Click aqui para restablecer contraseña</a>`,
+      html: `<a href="http://localhost:3000/forgotrecovery?token=${token}">Click aqui para restablecer contraseña</a>`,
     });
     res.json({
       status: "success",
-      msg: `Se envio un correo a ${user.first_name} para restablecer la contraseña`,
+      message: `Se envio un correo a ${user.first_name} para restablecer la contraseña`,
     });
   } catch (error) {
     return res.send({ status: "error", message: "Error inesperado" });

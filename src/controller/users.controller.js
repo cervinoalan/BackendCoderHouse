@@ -1,6 +1,5 @@
 const usersService = require("../repository/users.service");
 const UserDto = require("../dao/DTOs/user.dto");
-const local = require("dayjs/locale/ar");
 const transport = require("../utils/mailing");
 const moment = require("moment");
 const { TYPE_DOCUMENTS } = require("../config/config");

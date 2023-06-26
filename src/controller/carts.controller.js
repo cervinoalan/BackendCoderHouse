@@ -2,8 +2,10 @@ const { mapProductCart, calculateCartTotal } = require("../utils/carts.utils");
 const cartsService = require("../repository/carts.service");
 const productsService = require("../repository/products.service");
 const { v4 } = require("uuid");
+const userService = require("../repository/users.service");
+const mongoose = require('mongoose');
 
-const createCarts = async (req, res) => {
+const createCart = async (req, res) => {
   try {
     const { products = [] } = req.body;
 
@@ -62,6 +64,7 @@ const getCartById = async (req, res) => {
   }
 };
 
+
 const addProductToCart = async (req, res) => {
   const { cid, pid } = req.params;
   try {
@@ -118,6 +121,8 @@ const addProductToCart = async (req, res) => {
     });
   }
 };
+
+
 
 
 const deleteProductFromCart = async (req, res) => {
@@ -345,7 +350,7 @@ const purchaseCart = async (req, res) => {
 };
 
 module.exports = {
-  createCarts,
+  createCart,
   getCarts,
   getCartById,
   addProductToCart,

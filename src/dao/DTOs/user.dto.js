@@ -5,6 +5,7 @@ class UserDto {
     this.email = user.email;
     this.rol = user.rol;
     this.documents = user.documents
+    this.last_connection = user.last_connection
   }
 }
 

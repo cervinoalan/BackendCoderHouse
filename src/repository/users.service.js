@@ -10,11 +10,12 @@ class UsersService {
   updateUser = (id, user) => UsersManager.update(id, user);
   updateRol = (id, newRol) => UsersManager.updateRol(id, newRol);
   deleteUser = (id) => UsersManager.delete(id);
-  lastConnection = (id, last_connection) => UsersManager.lastConnection(id, last_connection);
+  lastConnection = (user, last_connection) => UsersManager.lastConnection(user, last_connection);
   deleteLast = (email) => UsersManager.deleteLast(email);
   deleteMany = (users) => UsersManager.deleteMany(users);
   updatePassword = (id, newPassword) => UsersManager.updatePassword(id, newPassword);
   editOneById = (id, params) => UsersManager.editOneById(id, params);
+  addCartToUser = (id, cartId) => UsersManager.addCartToUser(id, cartId);
 }
 
 module.exports = new UsersService();

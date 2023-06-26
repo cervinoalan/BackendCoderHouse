@@ -11,9 +11,20 @@ class CartsManager {
     return newCart;
   };
 
+
   getCarts = async () => {
     const carts = await cartsModel.find();
     return carts;
+  };
+
+  addProductToCart = async (cid, product, user) => {
+    const cart = await cartsModel.findById(cid);
+    console.log(JSON.stringify(product));
+    const resultado = cart.products.findIndex((prod) => prod.id == product.id);
+    console.log(resultado);
+    if (resultado === -1) {
+    } else {
+    }
   };
 
   getCartByUsername = async (username) => {
@@ -45,10 +56,12 @@ class CartsManager {
   };
 
   deleteProductFromCart = async (cid, pid) => {
-    const deleteProduct = await cartsModel.findOneAndUpdate({username : cid}, {
+    const deleteProduct = await cartsModel.findOneAndUpdate({ username: cid }, {
       $pull: { products: { pid } },
     });
     return deleteProduct;
   };
 }
+
 module.exports = new CartsManager();
+
