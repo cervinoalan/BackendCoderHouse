@@ -51,7 +51,6 @@ const getCartById = async (req, res) => {
   const cid = req.params.cid;
   try {
     const cart = await cartsService.getCartById(cid);
-    console.log(cart)
     res.json({
       msg: "Carrito encontrado",
       status: "success",
