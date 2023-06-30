@@ -58,7 +58,7 @@ const getCartById = async (req, res) => {
     });
   } catch (error) {
     res.status(404).json({
-      msg: "No se encuentra el carrito",
+      msg: "No se encuentra el carrito.",
       status: "error",
     });
   }
