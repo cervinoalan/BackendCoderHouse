@@ -7,6 +7,26 @@ const generateToken = (payload) => {
   return token;
 };
 
+const authToken = (req, res, next) => {
+  const headerAuth = req.headers.authorization;
+  if (!headerAuth) {
+    res.status(403).send({ error: 'token inexistente' });
+  }
+  const token = headerAuth.split(' ')[1];
+  if (token) {
+    jwt.verify(token, PRIVATE_KEY_JWT, async (error, credential) => {
+      if (error) {
+        res.status(403).send({ error: 'error inesperado', description: error });
+      } else {
+        const user = await usersService.getSession(credential.payload.id);
+        req.payload = user;
+        next();
+      }
+    });
+  } else {
+    res.status(401).send({ error: 'no se encontro token' });
+  }
+};
 
 const getUserByToken = (token) => {
   return jwt.verify(token,PRIVATE_KEY_JWT,async(error,credential)=>{
@@ -24,5 +44,6 @@ const getUserByToken = (token) => {
 
 module.exports = {
     generateToken,
-    getUserByToken
+    getUserByToken,
+    authToken
   };

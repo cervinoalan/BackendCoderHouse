@@ -4,7 +4,7 @@ const userController = require("../controller/users.controller")
 const { userAdmin } = require("../utils/userStatus");
 const { saveDocs } = require('../multer.utils');
 
-router.get('/', userController.getUsers);
+router.get('/:cid', userController.getUsers);
 router.post('/', userController.insertUser);
 router.put('/', userController.updateUser);
 router.delete('/', userController.deleteUser);

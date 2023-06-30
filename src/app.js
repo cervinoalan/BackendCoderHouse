@@ -23,7 +23,12 @@ const usersRouter = require("./routes/users.router");
 
 //init
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+  credentials: true,
+}));
 
 const configSwagger = {
   definition: {

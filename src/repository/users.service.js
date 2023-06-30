@@ -2,8 +2,8 @@
 const UsersManager = require("../dao/mongoManager/UsersManager");
 
 class UsersService {
-  getSession = (email, password) => UsersManager.get(email, password);
-  getUser = () => UsersManager.get();
+  getSession = (email, password) => UsersManager.getSession(email, password);
+  getUser = (userId) => UsersManager.getUser(userId);
   getById = (id) => UsersManager.getById(id);
   getUserByEmail = (email) => UsersManager.getByEmail(email);
   insertUser = (user) => UsersManager.insert(user);

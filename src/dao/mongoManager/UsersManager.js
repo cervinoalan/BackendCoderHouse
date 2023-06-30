@@ -1,7 +1,11 @@
 const UserSchema = require("../models/users.model");
 
 class UserManager {
-  get = () => UserSchema.find();
+  getSession = async (email, password) => {
+    return await UserSchema.findOne({ email, password });
+  };
+
+  getUser = (userId) => UserSchema.findById(userId);
 
   getById = (id) => UserSchema.findById(id);
 
@@ -23,11 +27,15 @@ class UserManager {
   delete = (id) => UserSchema.findByIdAndDelete(id);
 
   lastConnection = async (user, lastconnection) => {
-    user.last_connection = lastconnection;
-    let result = await UserSchema.findByIdAndUpdate(user._id, {
-      last_connection: lastconnection,
-    });
-    return result;
+    if (user) {
+      user.last_connection = lastconnection;
+      let result = await UserSchema.findByIdAndUpdate(user._id, {
+        last_connection: lastconnection,
+      });
+      return result;
+    } else {
+      throw new Error("El objeto de usuario es indefinido.");
+    }
   };
 
   deleteLast = async (email) => {

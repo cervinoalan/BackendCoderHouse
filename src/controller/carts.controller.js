@@ -51,6 +51,7 @@ const getCartById = async (req, res) => {
   const cid = req.params.cid;
   try {
     const cart = await cartsService.getCartById(cid);
+    console.log(cart)
     res.json({
       msg: "Carrito encontrado",
       status: "success",
@@ -67,63 +68,29 @@ const getCartById = async (req, res) => {
 
 const addProductToCart = async (req, res) => {
   const { cid, pid } = req.params;
-  try {
-    const product = await productsService.getProductById(pid);
-    if (!product) {
-      return res.status(400).json({
-        msg: `El producto con el id ${pid} no existe`,
-        status: "error",
-      });
-    }
+  const product = await productsService.getProductById(pid);
 
-    let cart = await cartsService.getCartById(cid);
-    if (!cart) {
-      const newCart = {
-        totalPrice: product.price,
-        totalQuantity: 1,
-        products: [{ product: pid, quantity: 1 }],
-      };
-      cart = await cartsService.createCart(newCart);
-      return res.json({
-        msg: "Carrito creado y productos agregados exitosamente",
-        status: "success",
-        payload: cart,
-      });
-    }
-
-    const findProduct = cart.products.find(
-      (prod) => prod.product.toString() === pid
-    );
-    if (!findProduct) {
-      cart.products.push({
-        product: pid,
-        unitValue: product.price,
-        quantity: 1,
-      });
-    } else {
-      findProduct.quantity++;
-    }
-
-    cart.totalQuantity++;
-    cart.totalPrice += product.price;
-
-    const cartToUpdate = await cartsService.updateCartProducts(cart);
-    res.json({
-      msg: "Producto agregado exitosamente",
-      status: "success",
-      payload: cartToUpdate,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(404).json({
-      msg: "Error al agregar producto",
-      status: "error",
+  if (!product) {
+    return res.status(400).json({
+      msg: `El producto con el id ${pid} no existe`,
+      ok: false,
     });
   }
+
+  const cart = await cartsService.getCartById(cid);
+
+  if (!cart) {
+    return res.status(200).json({
+      msg: 'Carrito no Encontrado',
+    });
+  }
+
+  const cartToSave = await cartsService.addProductToCart(cid, product);
+  return res.status(200).json({
+    msg: 'Producto agregado',
+    cart: cartToSave,
+  });
 };
-
-
-
 
 const deleteProductFromCart = async (req, res) => {
   const { cid, pid } = req.params;
@@ -132,59 +99,54 @@ const deleteProductFromCart = async (req, res) => {
     if (!product) {
       return res.status(400).json({
         msg: `El producto con el id ${pid} no existe`,
-        ok: false,
+        status: "error",
       });
-    } else {
-      const cart = await cartsService.getCartById(cid);
-
-      if (!cart) {
-        return res.status(400).json({
-          msg: `El carrito no existe`,
-          status: "error",
-        });
-      } else {
-        const findProduct = cart.products.find(
-          (product) => product.product._id.toString() === pid
-        );
-        if (!findProduct) {
-          return res.status(400).json({
-            msg: `El producto no existe en el carrito`,
-            status: "error",
-          });
-        }
-        if (findProduct.quantity === 1) {
-          cart.products = cart.products.filter(
-            (product) => product.product._id.toString() !== pid
-          );
-          cart.totalQuantity = cart.totalQuantity - 1;
-          cart.totalPrice = cart.totalPrice - findProduct.product.price;
-          const cartToUpdate = await cartsService.updateCartProducts(cart);
-          res.json({
-            msg: "Produto eliminado del carrito",
-            status: "success",
-            payload: cartToUpdate,
-          });
-        } else {
-          findProduct.quantity--;
-          cart.totalQuantity = cart.totalQuantity - 1;
-          cart.totalPrice = cart.totalPrice - findProduct.product.price;
-          const cartToUpdate = await cartsService.updateCartProducts(cart);
-          res.json({
-            msg: "Produto eliminado del carrito",
-            status: "success",
-            payload: cartToUpdate,
-          });
-        }
-      }
     }
+    
+    const cart = await cartsService.getCartById(cid);
+    if (!cart) {
+      return res.status(400).json({
+        msg: `El carrito no existe`,
+        status: "error",
+      });
+    }
+    
+    const findProduct = cart.products.find(
+      (product) => product.product._id.toString() === pid
+    );
+    if (!findProduct) {
+      return res.status(400).json({
+        msg: `El producto no existe en el carrito`,
+        status: "error",
+      });
+    }
+    
+    if (findProduct.quantity === 1) {
+      cart.products = cart.products.filter(
+        (product) => product.product._id.toString() !== pid
+      );
+    } else {
+      findProduct.quantity--;
+    }
+    
+    cart.totalQuantity = cart.totalQuantity - 1;
+    cart.totalPrice = cart.totalPrice - findProduct.product.price;
+    const cartToUpdate = await cartsService.updateCartProducts(cart);
+    
+    res.json({
+      msg: "Producto eliminado del carrito",
+      status: "success",
+      payload: cartToUpdate,
+    });
   } catch (error) {
     console.log(error);
-    res.status(404).json({
-      msg: "Error al eliminar el  producto",
+    res.status(500).json({
+      msg: "Error al eliminar el producto",
       status: "error",
     });
   }
 };
+
 
 const updateProductFromCart = async (req, res) => {
   const { cid } = req.params;

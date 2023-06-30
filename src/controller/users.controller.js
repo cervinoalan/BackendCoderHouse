@@ -7,9 +7,9 @@ const productsService = require("../repository/products.service");
 
 const getUsers = async (req, res) => {
   try {
-    const users = await usersService.getUser();
-    const usersDto = users.map((user) => new UserDto(user));
-    res.json(usersDto);
+    const userId = req.params.cid
+    const users = await usersService.getUser(userId);
+    res.json(users);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener los usuarios" });

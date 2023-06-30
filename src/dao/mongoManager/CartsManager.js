@@ -11,19 +11,41 @@ class CartsManager {
     return newCart;
   };
 
-
   getCarts = async () => {
     const carts = await cartsModel.find();
     return carts;
   };
 
-  addProductToCart = async (cid, product, user) => {
+  addProductToCart = async (cid, product) => {
     const cart = await cartsModel.findById(cid);
-    console.log(JSON.stringify(product));
-    const resultado = cart.products.findIndex((prod) => prod.id == product.id);
-    console.log(resultado);
-    if (resultado === -1) {
+
+    const productIndex = cart.products.findIndex(
+      (prod) => prod.product.toString() === product.id
+    );
+
+    if (productIndex === -1) {
+      const newCart = {
+        totalPrice: cart.totalPrice + product.price,
+        totalQuantity: cart.totalQuantity + 1,
+        products: [...cart.products, ...[{ product: product.id }]],
+        id: cart.id,
+      };
+      const result = await this.updateCartProducts(newCart);
     } else {
+      const newCart = {
+        totalPrice: cart.totalPrice + product.price,
+        totalQuantity: cart.totalQuantity + 1,
+        products: cart.products.map((cartProduct) =>
+          cartProduct.product.toString() === product.id
+            ? {
+                ...cartProduct,
+                quantity: ++cartProduct.quantity,
+              }
+            : cartProduct
+        ),
+        id: cart.id,
+      };
+      const result = await this.updateCartProducts(newCart);
     }
   };
 
@@ -35,7 +57,7 @@ class CartsManager {
   };
 
   getCartById = async (cid) => {
-    const cart = await cartsModel.findById(cid);
+    const cart = await cartsModel.findById(cid).populate("products.product");
     return cart;
   };
 
@@ -56,12 +78,14 @@ class CartsManager {
   };
 
   deleteProductFromCart = async (cid, pid) => {
-    const deleteProduct = await cartsModel.findOneAndUpdate({ username: cid }, {
-      $pull: { products: { pid } },
-    });
+    const deleteProduct = await cartsModel.findOneAndUpdate(
+      { username: cid },
+      {
+        $pull: { products: { pid } },
+      }
+    );
     return deleteProduct;
   };
 }
 
 module.exports = new CartsManager();
-

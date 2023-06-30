@@ -16,11 +16,11 @@ const login = async (req, res, next) => {
     email: req.user.email,
     rol: req.user.rol,
   };
-  const userDtos = new UserDto(req.user);
-  res.send(userDtos);
-  // let token = generateToken({ id: req.user.id });
   // const userDtos = new UserDto(req.user);
-  // res.send({userDtos : userDtos, token});
+  // res.send(userDtos);
+  let token = generateToken({ id: req.user.id });
+  const user = new UserDto(req.user);
+  res.send({user, token});
 };
 
 const register = async (req, res) => {
@@ -28,8 +28,9 @@ const register = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  await usersService.lastConnection(req.user, new Date().toLocaleString());
-  req.logger.info(`${req.user.first_name} - last connection updated`)
+// LA LINEA DE ABAJO LA COMENTO PORQUE SALTA USER UNDEFINED
+  // await usersService.lastConnection(req.user, new Date().toLocaleString());
+  // req.logger.info(`${req.user.first_name} - last connection updated`)
   req.session.destroy((error) => {
     if (!error) {
       res.send("Sesion cerrada con exito!");
