@@ -52,7 +52,8 @@ class UserManager {
   };
 
   updatePassword = (id, newPassword) => {
-    UserSchema.findByIdAndUpdate(id, { password: newPassword });
+    const result = UserSchema.findByIdAndUpdate({_id:id}, { password: newPassword });
+    return result
   };
 
   editOneById = async (id, params) => {

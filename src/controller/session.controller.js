@@ -81,7 +81,6 @@ const forgotRecovery = async (req, res, next) => {
     }
 
     const user = await getUserByToken(token);
-
     if (!user) {
       return res.status(403).json({
         status: "error",
@@ -99,7 +98,9 @@ const forgotRecovery = async (req, res, next) => {
     }
 
     const hashNewPassword = await hashPassword(newPassword);
-    await usersService.updatePassword(user.id, hashNewPassword);
+    console.log(hashNewPassword)
+    console.log(user._id)
+    await usersService.updatePassword(user._id, hashNewPassword);
 
     return res.status(200).json({
       status: "success",
