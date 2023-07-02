@@ -17,4 +17,5 @@ module.exports = {
   },
   PRIVATE_KEY_JWT: process.env.PRIVATE_KEY_JWT,
   TYPE_DOCUMENTS,
+  PRIVATE_KEY_STRIPE:process.env.PRIVATE_KEY_STRIPE,
 };

@@ -20,6 +20,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 const usersRouter = require("./routes/users.router");
+const paymentRouter = require("./routes/payment.router");
 
 //init
 const app = express();
@@ -85,6 +86,7 @@ app.use("/api/session", sessionRouter);
 app.use("/api/mockingproducts", mockingRouter);
 app.use("/loggerTest", loggerRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/payments", paymentRouter);
 
 //mdw control de errores
 app.use(mdwError);
