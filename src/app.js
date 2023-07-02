@@ -99,7 +99,7 @@ const httpServer = app.listen(PORT, () => {
 //mongoose
 mongoose.set("strictQuery", false);
 mongoose.connect(
-  MONGO_URL,
+  process.env.MONGO_URL,
 
   (error) => {
     if (error) {
